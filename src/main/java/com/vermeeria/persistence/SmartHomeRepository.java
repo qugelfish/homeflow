@@ -1,4 +1,4 @@
 package com.vermeeria.persistence;
 
-public class LogRepository {
+public class SmartHomeRepository {
 }

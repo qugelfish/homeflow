@@ -1,8 +1,0 @@
-# Create a copy of this file named local.properties.
-# Each developer should store their own local database configuration in that file.
-# Adjust the values below to match your local PostgreSQL setup.
-# Do not commit local.properties to the repository.
-
-db.url=jdbc:postgresql://localhost:5432/smarthome
-db.user=your_user
-db.password=your_password
