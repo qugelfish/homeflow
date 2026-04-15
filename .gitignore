@@ -37,3 +37,7 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+### Database Properties ###
+/config/local.properties
+src/main/java/com/vermeeria/persistence/DatabaseConnectionTest.java
