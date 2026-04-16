@@ -1,6 +1,6 @@
 .root,
 .app-root {
-    -fx-font-family: "Inter", "Segoe UI", sans-serif;
+    -fx-font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
     -fx-background-color: #0d1117;
     -fx-text-fill: #c9d1d9;
 }
@@ -17,14 +17,25 @@
     -fx-padding: 10 16 10 16;
 }
 
+.brand-box {
+    -fx-alignment: center-left;
+    -fx-padding: 0 18 0 0;
+}
+
+.app-logo {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.22), 10, 0.2, 0, 2);
+}
+
 .app-title {
-    -fx-font-size: 15px;
+    -fx-font-size: 20px;
     -fx-font-weight: bold;
     -fx-text-fill: #ffffff;
+    -fx-letter-spacing: 0.4px;
 }
 
 .sidebar {
     -fx-background-color: #161b22;
+    -fx-border-radius: 8;
     -fx-border-color: transparent #30363d transparent transparent;
     -fx-border-width: 1;
 }
@@ -47,6 +58,9 @@
 .navigation-list .list-cell {
     -fx-background-color: transparent;
     -fx-text-fill: #c9d1d9;
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-padding: 8 10 8 10;
 }
 
 .navigation-list .list-cell:hover {
@@ -62,11 +76,23 @@
     -fx-background-color: #0d1117;
 }
 
+.workspace {
+    -fx-background-color: transparent;
+}
+
 .content-card {
     -fx-background-color: #161b22;
     -fx-background-radius: 12;
     -fx-border-color: #30363d;
     -fx-border-radius: 12;
+}
+
+.list-panel {
+    -fx-padding: 24;
+}
+
+.editor-panel {
+    -fx-padding: 24;
 }
 
 .content-title {
@@ -78,6 +104,50 @@
 .content-subtitle {
     -fx-font-size: 14px;
     -fx-text-fill: #8b949e;
+}
+
+.content-list,
+.text-input,
+.content-text-area {
+    -fx-background-color: #0d1117;
+    -fx-text-fill: #c9d1d9;
+    -fx-border-color: #30363d;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+}
+
+.content-list {
+    -fx-control-inner-background: #0d1117;
+}
+
+.content-list .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: #c9d1d9;
+}
+
+.content-list .list-cell:selected {
+    -fx-background-color: #1f6feb;
+    -fx-text-fill: #ffffff;
+}
+
+.text-field,
+.combo-box,
+.text-area {
+    -fx-background-color: #0d1117;
+    -fx-text-fill: #c9d1d9;
+    -fx-prompt-text-fill: #8b949e;
+    -fx-highlight-fill: #1f6feb;
+    -fx-highlight-text-fill: #ffffff;
+}
+
+.combo-box .list-cell,
+.combo-box-popup .list-view .list-cell {
+    -fx-text-fill: #c9d1d9;
+    -fx-background-color: #0d1117;
+}
+
+.combo-box-popup .list-view {
+    -fx-background-color: #0d1117;
 }
 
 .status-bar {

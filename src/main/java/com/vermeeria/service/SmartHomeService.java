@@ -35,6 +35,47 @@ public class SmartHomeService {
     }
 
     /**
+     * Replaces the current in-memory data with a freshly loaded snapshot.
+     */
+    public void reloadAll() {
+        this.appData = repository.load();
+    }
+
+    /**
+     * Clears the current application state in memory.
+     */
+    public void resetAppData() {
+        this.appData = new AppData();
+    }
+
+    /**
+     * Returns the current number of rooms.
+     *
+     * @return the room count
+     */
+    public int getRoomCount() {
+        return appData.getRooms().size();
+    }
+
+    /**
+     * Returns the current number of devices.
+     *
+     * @return the device count
+     */
+    public int getDeviceCount() {
+        return appData.getDevices().size();
+    }
+
+    /**
+     * Returns the current number of scenarios.
+     *
+     * @return the scenario count
+     */
+    public int getScenarioCount() {
+        return appData.getScenarios().size();
+    }
+
+    /**
      * Saves the current application data using the configured repository.
      */
     public void saveAll() {
