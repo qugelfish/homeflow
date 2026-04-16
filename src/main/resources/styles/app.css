@@ -1,0 +1,118 @@
+.root,
+.app-root {
+    -fx-font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    -fx-background-color: #0d1117;
+    -fx-text-fill: #c9d1d9;
+}
+
+.label {
+    -fx-text-fill: #c9d1d9;
+}
+
+.tool-bar,
+.top-toolbar {
+    -fx-background-color: #161b22;
+    -fx-border-color: transparent transparent #30363d transparent;
+    -fx-border-width: 1;
+    -fx-padding: 10 16 10 16;
+}
+
+.brand-box {
+    -fx-alignment: center-left;
+    -fx-padding: 0 18 0 0;
+}
+
+.app-logo {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.22), 10, 0.2, 0, 2);
+}
+
+.app-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffffff;
+    -fx-letter-spacing: 0.4px;
+}
+
+.sidebar {
+    -fx-background-color: #161b22;
+    -fx-border-radius: 8;
+    -fx-border-color: transparent #30363d transparent transparent;
+    -fx-border-width: 1;
+}
+
+.section-title {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #f0f6fc;
+}
+
+.navigation-list {
+    -fx-background-color: #0d1117;
+    -fx-border-color: #30363d;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-control-inner-background: #0d1117;
+    -fx-text-fill: #c9d1d9;
+}
+
+.navigation-list .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: #c9d1d9;
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-padding: 8 10 8 10;
+}
+
+.navigation-list .list-cell:hover {
+    -fx-background-color: #21262d;
+}
+
+.navigation-list .list-cell:selected {
+    -fx-background-color: #1f6feb;
+    -fx-text-fill: white;
+}
+
+.content-area {
+    -fx-background-color: #0d1117;
+}
+
+.content-card {
+    -fx-background-color: #161b22;
+    -fx-background-radius: 12;
+    -fx-border-color: #30363d;
+    -fx-border-radius: 12;
+}
+
+.content-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffffff;
+}
+
+.content-subtitle {
+    -fx-font-size: 14px;
+    -fx-text-fill: #8b949e;
+}
+
+.status-bar {
+    -fx-background-color: #161b22;
+    -fx-border-color: #30363d transparent transparent transparent;
+    -fx-border-width: 1;
+}
+
+.button {
+    -fx-background-color: #21262d;
+    -fx-text-fill: #ffffff;
+    -fx-border-color: #30363d;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-padding: 6 12 6 12;
+}
+
+.button:hover {
+    -fx-background-color: #30363d;
+}
+
+.button:focused {
+    -fx-border-color: #58a6ff;
+}

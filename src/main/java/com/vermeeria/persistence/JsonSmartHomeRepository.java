@@ -44,6 +44,10 @@ public class JsonSmartHomeRepository implements SmartHomeRepository {
         }
 
         try {
+            if (Files.size(filePath) == 0L || Files.readString(filePath).isBlank()) {
+                return new AppData();
+            }
+
             return objectMapper.readValue(filePath.toFile(), AppData.class);
         } catch (IOException e) {
             throw new RuntimeException("Could not load app data.", e);
