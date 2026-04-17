@@ -21,7 +21,9 @@ public class RoomController {
     /**
      * Creates the room controller and initializes the basic user interface for room controls.
      *
+     * @param roomView the room view
      * @param roomService the room service
+     * @param statusUpdater the callback used to update status messages
      */
     public RoomController(RoomView roomView, RoomService roomService, Consumer<String> statusUpdater) {
         this.roomView = roomView;
