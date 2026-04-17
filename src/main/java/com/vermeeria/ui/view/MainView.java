@@ -60,10 +60,11 @@ public class MainView {
     }
 
     private ToolBar createToolbar() {
-        Label titleLabel = new Label("Home Flow");
+        Label titleLabel = new Label("HomeFlow");
         titleLabel.getStyleClass().add("app-title");
         titleLabel.setWrapText(false);
         titleLabel.setMinHeight(Region.USE_PREF_SIZE);
+        titleLabel.setPrefHeight(Region.USE_COMPUTED_SIZE);
 
         HBox brandBox = new HBox(12);
         brandBox.setAlignment(Pos.CENTER_LEFT);
@@ -100,6 +101,7 @@ public class MainView {
     private VBox createNavigation() {
         Label navigationTitle = new Label("Navigation");
         navigationTitle.getStyleClass().add("section-title");
+        navigationTitle.setMinHeight(Region.USE_PREF_SIZE);
 
         navigationList.getItems().addAll("Rooms", "Devices", "Scenarios");
         navigationList.getSelectionModel().selectFirst();

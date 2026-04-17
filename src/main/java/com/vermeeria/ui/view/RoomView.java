@@ -9,6 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 /**
@@ -48,6 +49,7 @@ public class RoomView {
     private Parent createRoomsListCard() {
         Label titleLabel = new Label("Rooms");
         titleLabel.getStyleClass().add("content-title");
+        titleLabel.setMinHeight(Region.USE_PREF_SIZE);
 
         Label subtitleLabel = new Label("Manage the rooms in your smart home.");
         subtitleLabel.getStyleClass().add("content-subtitle");
@@ -68,6 +70,7 @@ public class RoomView {
     private Parent createRoomEditorCard() {
         Label titleLabel = new Label("Room Details");
         titleLabel.getStyleClass().add("content-title");
+        titleLabel.setMinHeight(Region.USE_PREF_SIZE);
 
         Label subtitleLabel = new Label("Create a new room or prepare this area for later editing.");
         subtitleLabel.getStyleClass().add("content-subtitle");
