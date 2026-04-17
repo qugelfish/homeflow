@@ -1,6 +1,6 @@
 .root,
 .app-root {
-    -fx-font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    -fx-font-family: "System";
     -fx-background-color: #0d1117;
     -fx-text-fill: #c9d1d9;
 }
@@ -14,12 +14,12 @@
     -fx-background-color: #161b22;
     -fx-border-color: transparent transparent #30363d transparent;
     -fx-border-width: 1;
-    -fx-padding: 10 16 10 16;
+    -fx-padding: 12 18 12 18;
 }
 
 .brand-box {
     -fx-alignment: center-left;
-    -fx-padding: 0 18 0 0;
+    -fx-padding: 2 18 2 0;
 }
 
 .app-logo {
@@ -27,10 +27,11 @@
 }
 
 .app-title {
-    -fx-font-size: 20px;
+    -fx-font-family: "System";
+    -fx-font-size: 19px;
     -fx-font-weight: bold;
     -fx-text-fill: #ffffff;
-    -fx-letter-spacing: 0.4px;
+    -fx-padding: 2 0 4 0;
 }
 
 .sidebar {
@@ -92,6 +93,39 @@
 .content-subtitle {
     -fx-font-size: 14px;
     -fx-text-fill: #8b949e;
+}
+
+.text-field,
+.form-input {
+    -fx-background-color: #0a0f14;
+    -fx-background-insets: 0;
+    -fx-background-radius: 8;
+    -fx-border-color: #30363d;
+    -fx-border-radius: 8;
+    -fx-border-width: 1;
+    -fx-text-fill: #f0f6fc;
+    -fx-prompt-text-fill: #7d8590;
+    -fx-highlight-fill: #1f6feb;
+    -fx-highlight-text-fill: #ffffff;
+    -fx-padding: 10 12 10 12;
+}
+
+.text-field:focused,
+.form-input:focused {
+    -fx-background-color: #0a0f14;
+    -fx-border-color: #58a6ff;
+}
+
+.text-field .content,
+.form-input .content {
+    -fx-background-color: #0a0f14;
+    -fx-background-radius: 8;
+}
+
+.tool-bar .label,
+.status-bar .label,
+.content-card .label {
+    -fx-padding: 1 0 2 0;
 }
 
 .status-bar {
