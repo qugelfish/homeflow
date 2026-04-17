@@ -2,6 +2,7 @@ package com.vermeeria.app;
 
 import com.vermeeria.persistence.JsonSmartHomeRepository;
 import com.vermeeria.persistence.SmartHomeRepository;
+import com.vermeeria.service.RoomService;
 import com.vermeeria.service.SmartHomeService;
 import com.vermeeria.ui.controller.MainController;
 import javafx.application.Application;
@@ -31,7 +32,8 @@ public class SmartHomeApplication extends Application {
                 new JsonSmartHomeRepository(Path.of("data", "app-data.json"));
 
         SmartHomeService smartHomeService = new SmartHomeService(repository);
-        MainController mainController = new MainController(smartHomeService);
+        RoomService roomService = new RoomService();
+        MainController mainController = new MainController(smartHomeService, roomService);
 
         Scene scene = new Scene(mainController.getView(), 1280, 820);
         scene.getStylesheets().add(
