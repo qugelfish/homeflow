@@ -4,6 +4,7 @@ import com.vermeeria.service.RoomService;
 import com.vermeeria.ui.view.RoomView;
 import javafx.scene.Parent;
 
+import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
@@ -29,54 +30,96 @@ public class RoomController {
 
         wireActions();
         loadRooms();
+        handleRoomSelection();
     }
 
     private void wireActions() {
-        // TODO register selection handling so the editor reflects the selected room
+        roomView.getRoomsList().getSelectionModel().selectedItemProperty()
+                .addListener((observable, oldValue, newValue) -> handleRoomSelection());
         roomView.getAddRoomButton().setOnAction(event -> handleAddRoom());
         roomView.getEditRoomButton().setOnAction(event -> handleEditRoom());
         roomView.getDeleteRoomButton().setOnAction(event -> handleDeleteRoom());
     }
 
     private void handleAddRoom() {
-        // TODO validate the entered room name before saving
-        // TODO create the room via RoomService
-        // TODO clear the text field after a successful save
-        // TODO refresh the list of rooms after adding
-        // TODO report validation errors and success messages via the status bar
-        statusUpdater.accept("Adding room...");
+        String roomNameInput = roomView.getRoomNameField().getText().trim();
+        if (roomNameInput.isBlank()) {
+            statusUpdater.accept("Room name cannot be empty");
+            return;
+        }
+
+        try {
+            roomService.createRoom(roomNameInput);
+            roomView.getRoomNameField().clear();
+            loadRooms();
+            statusUpdater.accept("Room created");
+        } catch (RuntimeException exception) {
+            statusUpdater.accept(exception.getMessage());
+        }
     }
 
     private void handleEditRoom() {
-        // TODO ensure a room is selected before editing
-        // TODO validate the updated room name
-        // TODO update the selected room via RoomService
-        // TODO refresh the list and keep the edited room selected
-        // TODO report validation errors and success messages via the status bar
-        statusUpdater.accept("Editing room...");
+        String selectedRoom = roomView.getRoomsList().getSelectionModel().getSelectedItem();
+        String roomNameInput = roomView.getRoomNameField().getText().trim();
+
+        if (selectedRoom == null) {
+            statusUpdater.accept("Please select a room to edit");
+            return;
+        }
+        if (roomNameInput.isBlank()) {
+            statusUpdater.accept("Room name cannot be empty");
+            return;
+        }
+
+        try {
+            roomService.updateRoom(selectedRoom, roomNameInput);
+            loadRooms();
+            roomView.getRoomsList().getSelectionModel().select(roomNameInput);
+            statusUpdater.accept("Room updated");
+        } catch (RuntimeException exception) {
+            statusUpdater.accept(exception.getMessage());
+        }
     }
 
     private void handleDeleteRoom() {
-        // TODO ensure a room is selected before deleting
-        // TODO decide how rooms with assigned devices should be handled
-        // TODO delete the selected room via RoomService
-        // TODO refresh the list and clear the editor after deletion
-        // TODO report validation errors and success messages via the status bar
-        statusUpdater.accept("Deleting room...");
+        String selectedRoom = roomView.getRoomsList().getSelectionModel().getSelectedItem();
+        if (selectedRoom == null) {
+            statusUpdater.accept("Please select a room to delete");
+            return;
+        }
+
+        try {
+            roomService.deleteRoom(selectedRoom);
+            roomView.getRoomNameField().clear();
+            loadRooms();
+            handleRoomSelection();
+            statusUpdater.accept("Room deleted");
+        } catch (RuntimeException exception) {
+            statusUpdater.accept(exception.getMessage());
+        }
     }
 
     private void loadRooms() {
-        // TODO load all existing rooms from RoomService
-        // TODO map persisted room data to visible list entries
-        // TODO update the ListView with the current room names
+        roomView.getRoomsList().getItems().setAll(roomService.getAllRooms().stream().filter(Objects::nonNull).map(Object::toString).toList());
     }
 
     private void handleRoomSelection() {
-        // TODO read the selected room from the ListView
-        // TODO show the selected room data in the editor field
-        // TODO disable edit and delete actions when nothing is selected
+        String selectedRoom = roomView.getRoomsList().getSelectionModel().getSelectedItem();
+        boolean roomSelected = selectedRoom != null;
+
+        roomView.getEditRoomButton().setDisable(!roomSelected);
+        roomView.getDeleteRoomButton().setDisable(!roomSelected);
+
+        if (roomSelected) {
+            roomView.getRoomNameField().setText(selectedRoom);
+        }
     }
 
+    /**
+     * Returns the root view of the controller.
+     *
+     * @return the root node
+     */
     public Parent getView() {
         return roomView.getRoot();
     }
