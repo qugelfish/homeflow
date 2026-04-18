@@ -52,16 +52,9 @@ public class MainController {
             }
         });
 
-        mainView.getNewButton().setOnAction(event -> handleNewProject());
         mainView.getLoadButton().setOnAction(event -> handleLoadProject());
         mainView.getSaveButton().setOnAction(event -> handleSaveProject());
         mainView.getExecuteButton().setOnAction(event -> handleExecuteScenario());
-    }
-
-    private void handleNewProject() {
-        smartHomeService.resetAppData();
-        refreshCurrentView();
-        updateStatus("Created a new empty project");
     }
 
     private void handleLoadProject() {
