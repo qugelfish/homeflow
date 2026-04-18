@@ -213,6 +213,7 @@ public class DeviceController {
 
     private void enterEditMode() {
         editMode = true;
+        deviceView.getDevicesList().setDisable(true);
         setFormDisabled(false);
         deviceView.getEditDeviceButton().setText("Save");
         deviceView.getDeviceNameField().requestFocus();
@@ -221,6 +222,7 @@ public class DeviceController {
 
     private void leaveEditMode() {
         editMode = false;
+        deviceView.getDevicesList().setDisable(false);
         setFormDisabled(true);
         deviceView.getEditDeviceButton().setText("✎");
     }
@@ -228,6 +230,7 @@ public class DeviceController {
     private void enterCreateMode() {
         createMode = true;
         editMode = false;
+        deviceView.getDevicesList().setDisable(true);
         deviceView.getDevicesList().getSelectionModel().clearSelection();
         clearForm();
         setFormDisabled(false);
@@ -246,6 +249,7 @@ public class DeviceController {
 
     private void leaveCreateMode() {
         createMode = false;
+        deviceView.getDevicesList().setDisable(false);
         setFormDisabled(true);
         deviceView.getAddDeviceButton().setText("Add device");
         handleDeviceSelection();
@@ -264,8 +268,21 @@ public class DeviceController {
      * @param deviceIdToReselect the device identifier to reselect
      */
     public void refresh(final String deviceIdToReselect) {
+        String targetDeviceId = deviceIdToReselect;
+        if (targetDeviceId == null) {
+            DeviceDefinition selectedDevice = deviceView.getDevicesList().getSelectionModel().getSelectedItem();
+            targetDeviceId = selectedDevice == null ? null : selectedDevice.getId();
+        }
+
+        if (editMode) {
+            leaveEditMode();
+        }
+        if (createMode) {
+            leaveCreateMode();
+        }
+
         loadSelectableValues();
-        loadDevices(deviceIdToReselect);
+        loadDevices(targetDeviceId);
         handleDeviceSelection();
     }
 

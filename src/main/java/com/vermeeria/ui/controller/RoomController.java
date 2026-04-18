@@ -158,6 +158,7 @@ public class RoomController {
 
     private void enterEditMode() {
         editMode = true;
+        roomView.getRoomsList().setDisable(true);
         roomView.getRoomNameField().setDisable(false);
         roomView.getEditRoomButton().setText("Save");
         roomView.getRoomNameField().requestFocus();
@@ -166,6 +167,7 @@ public class RoomController {
 
     private void leaveEditMode() {
         editMode = false;
+        roomView.getRoomsList().setDisable(false);
         roomView.getRoomNameField().setDisable(true);
         roomView.getEditRoomButton().setText("✎");
     }
@@ -173,6 +175,7 @@ public class RoomController {
     private void enterCreateMode() {
         createMode = true;
         editMode = false;
+        roomView.getRoomsList().setDisable(true);
         roomView.getRoomsList().getSelectionModel().clearSelection();
         roomView.getRoomNameField().clear();
         roomView.getRoomNameField().setDisable(false);
@@ -184,6 +187,7 @@ public class RoomController {
 
     private void leaveCreateMode() {
         createMode = false;
+        roomView.getRoomsList().setDisable(false);
         roomView.getRoomNameField().setDisable(true);
         roomView.getAddRoomButton().setText("Add room");
         handleRoomSelection();
@@ -202,7 +206,17 @@ public class RoomController {
      * Reloads the current room data into the view.
      */
     public void refresh() {
-        loadRooms();
+        Room selectedRoom = roomView.getRoomsList().getSelectionModel().getSelectedItem();
+        String roomIdToReselect = selectedRoom == null ? null : selectedRoom.getId();
+
+        if (editMode) {
+            leaveEditMode();
+        }
+        if (createMode) {
+            leaveCreateMode();
+        }
+
+        loadRooms(roomIdToReselect);
         handleRoomSelection();
     }
 }
