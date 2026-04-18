@@ -10,6 +10,7 @@ package com.vermeeria.model;
 public enum ActionParameterKind {
     NONE,
     BOOLEAN,
+    SELECTION,
     PERCENTAGE,
     TEMPERATURE
 }
