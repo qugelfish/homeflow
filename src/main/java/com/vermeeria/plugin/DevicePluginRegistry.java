@@ -28,6 +28,8 @@ public class DevicePluginRegistry {
     private static final String PLUGIN_PACKAGE = "com.vermeeria.plugin";
     private static final String PLUGIN_PACKAGE_PATH = PLUGIN_PACKAGE.replace('.', '/');
     private static final String DOT_CLASS = ".class";
+    private static final int MAX_JAR_ENTRIES_TO_SCAN = 1_000;
+    private static final long MAX_CLASS_ENTRY_SIZE = 1_048_576L;
     private final Map<String, DevicePlugin> pluginsByTypeKey;
 
     /**
@@ -104,16 +106,32 @@ public class DevicePluginRegistry {
 
     private void loadPluginsFromJar(final URL resource) throws IOException {
         JarURLConnection jarConnection = (JarURLConnection) resource.openConnection();
+        jarConnection.setUseCaches(false);
         try (JarFile jarFile = jarConnection.getJarFile()) {
             Enumeration<JarEntry> entries = jarFile.entries();
+            int scannedEntries = 0;
             while (entries.hasMoreElements()) {
+                if (scannedEntries++ >= MAX_JAR_ENTRIES_TO_SCAN) {
+                    throw new IllegalStateException("Refusing to scan an unexpectedly large plugin archive.");
+                }
+
                 JarEntry entry = entries.nextElement();
+                validateJarEntry(entry);
                 String entryName = entry.getName();
                 if (entryName.startsWith(PLUGIN_PACKAGE_PATH) && !entry.isDirectory() && entryName.endsWith(DOT_CLASS) && !entryName.contains("$")) {
                     String simpleName = entryName.substring(entryName.lastIndexOf('/') + 1);
                     registerPluginClassName(simpleName);
                 }
             }
+        }
+    }
+
+    private void validateJarEntry(final JarEntry entry) {
+        long entrySize = entry.getSize();
+        long compressedSize = entry.getCompressedSize();
+
+        if (entrySize > MAX_CLASS_ENTRY_SIZE || compressedSize > MAX_CLASS_ENTRY_SIZE) {
+            throw new IllegalStateException("Refusing to scan an oversized plugin archive entry: " + entry.getName());
         }
     }
 
