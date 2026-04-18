@@ -39,7 +39,7 @@ public class BlindPlugin implements DevicePlugin {
     }
 
     /**
-     * Creates the default heater state for newly added devices.
+     * Creates the default blind state for newly added devices.
      *
      * @return the default state map
      */
