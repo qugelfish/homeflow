@@ -60,11 +60,17 @@ public class MainView {
     }
 
     private ToolBar createToolbar() {
-        Label titleLabel = new Label("HomeFlow");
-        titleLabel.getStyleClass().add("app-title");
-        titleLabel.setWrapText(false);
-        titleLabel.setMinHeight(Region.USE_PREF_SIZE);
-        titleLabel.setPrefHeight(Region.USE_COMPUTED_SIZE);
+        Label homeLabel = new Label("Home");
+        homeLabel.getStyleClass().add("app-title");
+        homeLabel.setWrapText(false);
+        homeLabel.setMinHeight(Region.USE_PREF_SIZE);
+        homeLabel.setPrefHeight(Region.USE_COMPUTED_SIZE);
+
+        Label flowLabel = new Label("Flow");
+        flowLabel.getStyleClass().addAll("app-title", "app-title-accent");
+        flowLabel.setWrapText(false);
+        flowLabel.setMinHeight(Region.USE_PREF_SIZE);
+        flowLabel.setPrefHeight(Region.USE_COMPUTED_SIZE);
 
         HBox brandBox = new HBox(12);
         brandBox.setAlignment(Pos.CENTER_LEFT);
@@ -79,7 +85,9 @@ public class MainView {
             logoView.getStyleClass().add("app-logo");
             brandBox.getChildren().add(logoView);
         }
-        brandBox.getChildren().add(titleLabel);
+        HBox titleBox = new HBox(0, homeLabel, flowLabel);
+        titleBox.setAlignment(Pos.CENTER_LEFT);
+        brandBox.getChildren().add(titleBox);
 
         HBox spacer = new HBox();
         HBox.setHgrow(spacer, Priority.ALWAYS);
