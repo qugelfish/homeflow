@@ -19,7 +19,7 @@ public class HeaterPlugin implements DevicePlugin {
     private static final String POWER_KEY = "power";
     private static final String TARGET_TEMPERATURE_KEY = "targetTemperature";
 
-    /**å
+    /**
      * Returns the technical type key used for this plugin.
      *
      * @return the type key
