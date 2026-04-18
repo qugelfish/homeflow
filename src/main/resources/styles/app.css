@@ -34,6 +34,10 @@
     -fx-padding: 3 0 5 0;
 }
 
+.app-title-accent {
+    -fx-font-style: italic;
+}
+
 .sidebar {
     -fx-background-color: #161b22;
     -fx-border-radius: 8;

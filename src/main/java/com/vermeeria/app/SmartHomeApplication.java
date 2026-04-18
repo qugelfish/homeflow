@@ -32,7 +32,7 @@ public class SmartHomeApplication extends Application {
                 new JsonSmartHomeRepository(Path.of("data", "app-data.json"));
 
         SmartHomeService smartHomeService = new SmartHomeService(repository);
-        RoomService roomService = new RoomService();
+        RoomService roomService = new RoomService(smartHomeService);
         MainController mainController = new MainController(smartHomeService, roomService);
 
         Scene scene = new Scene(mainController.getView(), 1280, 820);

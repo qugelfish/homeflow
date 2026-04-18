@@ -1,10 +1,10 @@
 package com.vermeeria.ui.controller;
 
+import com.vermeeria.model.Room;
 import com.vermeeria.service.RoomService;
 import com.vermeeria.ui.view.RoomView;
 import javafx.scene.Parent;
 
-import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
@@ -17,6 +17,8 @@ public class RoomController {
     private final RoomView roomView;
     private final RoomService roomService;
     private final Consumer<String> statusUpdater;
+    private boolean editMode;
+    private boolean createMode;
 
     /**
      * Creates the room controller and initializes the basic user interface for room controls.
@@ -29,6 +31,8 @@ public class RoomController {
         this.roomView = roomView;
         this.roomService = roomService;
         this.statusUpdater = statusUpdater;
+        this.editMode = false;
+        this.createMode = false;
 
         wireActions();
         loadRooms();
@@ -44,6 +48,12 @@ public class RoomController {
     }
 
     private void handleAddRoom() {
+        if (!createMode) {
+            enterCreateMode();
+            statusUpdater.accept("Enter a name for the new room");
+            return;
+        }
+
         String roomNameInput = roomView.getRoomNameField().getText().trim();
         if (roomNameInput.isBlank()) {
             statusUpdater.accept("Room name cannot be empty");
@@ -54,6 +64,7 @@ public class RoomController {
             roomService.createRoom(roomNameInput);
             roomView.getRoomNameField().clear();
             loadRooms();
+            leaveCreateMode();
             statusUpdater.accept("Room created");
         } catch (RuntimeException exception) {
             statusUpdater.accept(exception.getMessage());
@@ -61,22 +72,31 @@ public class RoomController {
     }
 
     private void handleEditRoom() {
-        String selectedRoom = roomView.getRoomsList().getSelectionModel().getSelectedItem();
-        String roomNameInput = roomView.getRoomNameField().getText().trim();
-
+        Room selectedRoom = roomView.getRoomsList().getSelectionModel().getSelectedItem();
         if (selectedRoom == null) {
             statusUpdater.accept("Please select a room to edit");
             return;
         }
+
+        if (createMode) {
+            leaveCreateMode();
+        }
+        if (!editMode) {
+            enterEditMode();
+            statusUpdater.accept("Editing room name");
+            return;
+        }
+
+        String roomNameInput = roomView.getRoomNameField().getText().trim();
         if (roomNameInput.isBlank()) {
             statusUpdater.accept("Room name cannot be empty");
             return;
         }
 
         try {
-            roomService.updateRoom(selectedRoom, roomNameInput);
-            loadRooms();
-            roomView.getRoomsList().getSelectionModel().select(roomNameInput);
+            roomService.updateRoom(selectedRoom.getId(), roomNameInput);
+            loadRooms(selectedRoom.getId());
+            leaveEditMode();
             statusUpdater.accept("Room updated");
         } catch (RuntimeException exception) {
             statusUpdater.accept(exception.getMessage());
@@ -84,15 +104,17 @@ public class RoomController {
     }
 
     private void handleDeleteRoom() {
-        String selectedRoom = roomView.getRoomsList().getSelectionModel().getSelectedItem();
+        Room selectedRoom = roomView.getRoomsList().getSelectionModel().getSelectedItem();
         if (selectedRoom == null) {
             statusUpdater.accept("Please select a room to delete");
             return;
         }
 
         try {
-            roomService.deleteRoom(selectedRoom);
+            roomService.deleteRoom(selectedRoom.getId());
             roomView.getRoomNameField().clear();
+            leaveEditMode();
+            leaveCreateMode();
             loadRooms();
             handleRoomSelection();
             statusUpdater.accept("Room deleted");
@@ -102,19 +124,69 @@ public class RoomController {
     }
 
     private void loadRooms() {
-        roomView.getRoomsList().getItems().setAll(roomService.getAllRooms().stream().filter(Objects::nonNull).map(Object::toString).toList());
+        loadRooms(null);
+    }
+
+    private void loadRooms(final String roomIdToReselect) {
+        roomView.getRoomsList().getItems().setAll(roomService.getAllRooms());
+        if (roomIdToReselect != null) {
+            roomView.getRoomsList().getItems().stream()
+                    .filter(room -> roomIdToReselect.equals(room.getId()))
+                    .findFirst()
+                    .ifPresent(room -> roomView.getRoomsList().getSelectionModel().select(room));
+        }
     }
 
     private void handleRoomSelection() {
-        String selectedRoom = roomView.getRoomsList().getSelectionModel().getSelectedItem();
+        Room selectedRoom = roomView.getRoomsList().getSelectionModel().getSelectedItem();
         boolean roomSelected = selectedRoom != null;
 
         roomView.getEditRoomButton().setDisable(!roomSelected);
         roomView.getDeleteRoomButton().setDisable(!roomSelected);
 
-        if (roomSelected) {
-            roomView.getRoomNameField().setText(selectedRoom);
+        if (roomSelected && !createMode && !editMode) {
+            roomView.getRoomNameField().setText(selectedRoom.getName());
+        } else if (!roomSelected && !createMode) {
+            roomView.getRoomNameField().clear();
         }
+
+        if (!editMode && !createMode) {
+            roomView.getRoomNameField().setDisable(true);
+            roomView.getEditRoomButton().setText("✎");
+        }
+    }
+
+    private void enterEditMode() {
+        editMode = true;
+        roomView.getRoomNameField().setDisable(false);
+        roomView.getEditRoomButton().setText("Save");
+        roomView.getRoomNameField().requestFocus();
+        roomView.getRoomNameField().positionCaret(roomView.getRoomNameField().getText().length());
+    }
+
+    private void leaveEditMode() {
+        editMode = false;
+        roomView.getRoomNameField().setDisable(true);
+        roomView.getEditRoomButton().setText("✎");
+    }
+
+    private void enterCreateMode() {
+        createMode = true;
+        editMode = false;
+        roomView.getRoomsList().getSelectionModel().clearSelection();
+        roomView.getRoomNameField().clear();
+        roomView.getRoomNameField().setDisable(false);
+        roomView.getEditRoomButton().setDisable(true);
+        roomView.getDeleteRoomButton().setDisable(true);
+        roomView.getAddRoomButton().setText("Save room");
+        roomView.getRoomNameField().requestFocus();
+    }
+
+    private void leaveCreateMode() {
+        createMode = false;
+        roomView.getRoomNameField().setDisable(true);
+        roomView.getAddRoomButton().setText("Add room");
+        handleRoomSelection();
     }
 
     /**

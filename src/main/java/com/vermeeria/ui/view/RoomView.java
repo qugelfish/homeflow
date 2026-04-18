@@ -1,11 +1,13 @@
 package com.vermeeria.ui.view;
 
+import com.vermeeria.model.Room;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -20,7 +22,7 @@ import javafx.scene.layout.VBox;
 public class RoomView {
 
     private final BorderPane root;
-    private final ListView<String> roomsList;
+    private final ListView<Room> roomsList;
     private final TextField roomNameField;
     private final Button addRoomButton;
     private final Button editRoomButton;
@@ -34,8 +36,9 @@ public class RoomView {
         this.roomsList = new ListView<>();
         this.roomNameField = new TextField();
         this.addRoomButton = new Button("Add room");
-        this.editRoomButton = new Button("Edit room");
+        this.editRoomButton = new Button("✎");
         this.deleteRoomButton = new Button("Delete room");
+        this.editRoomButton.setTooltip(new Tooltip("Edit name"));
 
         initialize();
     }
@@ -80,13 +83,13 @@ public class RoomView {
 
         roomNameField.setPromptText("Enter room name");
         roomNameField.getStyleClass().add("form-input");
-        // TODO use this input field for create and edit mode
-        // TODO add visual validation feedback once room validation exists
+        roomNameField.setDisable(true);
+        HBox.setHgrow(roomNameField, Priority.ALWAYS);
 
-        HBox buttonBar = new HBox(10, addRoomButton, editRoomButton, deleteRoomButton);
-        // TODO disable edit and delete until a room selection is available
+        HBox roomNameBar = new HBox(10, roomNameField, editRoomButton);
+        HBox buttonBar = new HBox(10, addRoomButton, deleteRoomButton);
 
-        VBox editorCard = new VBox(12, titleLabel, subtitleLabel, nameLabel, roomNameField, buttonBar);
+        VBox editorCard = new VBox(12, titleLabel, subtitleLabel, nameLabel, roomNameBar, buttonBar);
         editorCard.setPadding(new Insets(32));
         editorCard.setSpacing(12);
         editorCard.getStyleClass().add("content-card");
@@ -109,7 +112,7 @@ public class RoomView {
      *
      * @return the room list
      */
-    public ListView<String> getRoomsList() {
+    public ListView<Room> getRoomsList() {
         return roomsList;
     }
 

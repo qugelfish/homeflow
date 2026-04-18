@@ -76,4 +76,14 @@ public class Room {
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
+
+    /**
+     * Returns the name of the room
+     *
+     * @return the name of the room
+     */
+    @Override
+    public String toString() {
+        return name;
+    }
 }
