@@ -104,6 +104,12 @@ public class RoomController {
     }
 
     private void handleDeleteRoom() {
+        if (createMode) {
+            leaveCreateMode();
+            statusUpdater.accept("Room creation cancelled");
+            return;
+        }
+
         Room selectedRoom = roomView.getRoomsList().getSelectionModel().getSelectedItem();
         if (selectedRoom == null) {
             statusUpdater.accept("Please select a room to delete");
@@ -180,7 +186,8 @@ public class RoomController {
         roomView.getRoomNameField().clear();
         roomView.getRoomNameField().setDisable(false);
         roomView.getEditRoomButton().setDisable(true);
-        roomView.getDeleteRoomButton().setDisable(true);
+        roomView.getDeleteRoomButton().setDisable(false);
+        roomView.getDeleteRoomButton().setText("Cancel");
         roomView.getAddRoomButton().setText("Save room");
         roomView.getRoomNameField().requestFocus();
     }
@@ -190,6 +197,7 @@ public class RoomController {
         roomView.getRoomsList().setDisable(false);
         roomView.getRoomNameField().setDisable(true);
         roomView.getAddRoomButton().setText("Add room");
+        roomView.getDeleteRoomButton().setText("Delete room");
         handleRoomSelection();
     }
 
