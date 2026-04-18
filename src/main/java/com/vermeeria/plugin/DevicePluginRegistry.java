@@ -27,6 +27,7 @@ public class DevicePluginRegistry {
 
     private static final String PLUGIN_PACKAGE = "com.vermeeria.plugin";
     private static final String PLUGIN_PACKAGE_PATH = PLUGIN_PACKAGE.replace('.', '/');
+    private static final String DOT_CLASS = ".class";
     private final Map<String, DevicePlugin> pluginsByTypeKey;
 
     /**
@@ -90,7 +91,7 @@ public class DevicePluginRegistry {
     private void loadPluginsFromDirectory(final URL resource) {
         String decodedPath = URLDecoder.decode(resource.getPath(), StandardCharsets.UTF_8);
         File directory = new File(decodedPath);
-        File[] files = directory.listFiles((dir, name) -> name.endsWith(".class"));
+        File[] files = directory.listFiles((dir, name) -> name.endsWith(DOT_CLASS));
 
         if (files == null) {
             return;
@@ -108,7 +109,7 @@ public class DevicePluginRegistry {
             while (entries.hasMoreElements()) {
                 JarEntry entry = entries.nextElement();
                 String entryName = entry.getName();
-                if (entryName.startsWith(PLUGIN_PACKAGE_PATH) && !entry.isDirectory() && entryName.endsWith(".class") && !entryName.contains("$")) {
+                if (entryName.startsWith(PLUGIN_PACKAGE_PATH) && !entry.isDirectory() && entryName.endsWith(DOT_CLASS) && !entryName.contains("$")) {
                     String simpleName = entryName.substring(entryName.lastIndexOf('/') + 1);
                     registerPluginClassName(simpleName);
                 }
@@ -117,7 +118,7 @@ public class DevicePluginRegistry {
     }
 
     private void registerPluginClassName(final String classFileName) {
-        String simpleClassName = classFileName.replace(".class", "");
+        String simpleClassName = classFileName.replace(DOT_CLASS, "");
         String fullyQualifiedName = PLUGIN_PACKAGE + "." + simpleClassName;
 
         try {

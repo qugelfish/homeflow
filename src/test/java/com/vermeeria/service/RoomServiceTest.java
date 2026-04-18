@@ -201,6 +201,7 @@ class RoomServiceTest {
 
         @Override
         public void save(final AppData appData) {
+            // Not needed for the tests, as we directly manipulate the in-memory AppData instance.
         }
     }
 }
