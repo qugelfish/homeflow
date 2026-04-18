@@ -232,3 +232,19 @@
 .button:focused {
     -fx-border-color: #58a6ff;
 }
+
+.success-button {
+    -fx-text-fill: #3fb950;
+}
+
+.success-button:hover {
+    -fx-text-fill: #56d364;
+}
+
+.danger-button {
+    -fx-text-fill: #f85149;
+}
+
+.danger-button:hover {
+    -fx-text-fill: #ff7b72;
+}

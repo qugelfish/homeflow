@@ -39,6 +39,8 @@ public class RoomView {
         this.editRoomButton = new Button("✎");
         this.deleteRoomButton = new Button("Delete room");
         this.editRoomButton.setTooltip(new Tooltip("Edit name"));
+        this.addRoomButton.getStyleClass().add("success-button");
+        this.deleteRoomButton.getStyleClass().add("danger-button");
 
         initialize();
     }
@@ -86,7 +88,9 @@ public class RoomView {
         HBox.setHgrow(roomNameField, Priority.ALWAYS);
 
         HBox roomNameBar = new HBox(10, roomNameField, editRoomButton);
-        HBox buttonBar = new HBox(10, addRoomButton, deleteRoomButton);
+        Region buttonSpacer = new Region();
+        HBox.setHgrow(buttonSpacer, Priority.ALWAYS);
+        HBox buttonBar = new HBox(10, addRoomButton, buttonSpacer, deleteRoomButton);
 
         VBox editorCard = new VBox(12, titleLabel, subtitleLabel, nameLabel, roomNameBar, buttonBar);
         editorCard.setPadding(new Insets(32));

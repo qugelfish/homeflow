@@ -48,6 +48,8 @@ public class DeviceView {
         this.editDeviceButton = new Button("✎");
         this.deleteDeviceButton = new Button("Delete device");
         this.editDeviceButton.setTooltip(new Tooltip("Edit device"));
+        this.addDeviceButton.getStyleClass().add("success-button");
+        this.deleteDeviceButton.getStyleClass().add("danger-button");
 
         initialize();
     }
@@ -110,7 +112,9 @@ public class DeviceView {
         deviceStateValueLabel.setWrapText(true);
 
         HBox deviceNameBar = new HBox(10, deviceNameField, editDeviceButton);
-        HBox buttonBar = new HBox(10, addDeviceButton, deleteDeviceButton);
+        Region buttonSpacer = new Region();
+        HBox.setHgrow(buttonSpacer, Priority.ALWAYS);
+        HBox buttonBar = new HBox(10, addDeviceButton, buttonSpacer, deleteDeviceButton);
 
         VBox editorCard = new VBox(12, titleLabel, subtitleLabel, nameLabel, deviceNameBar, typeLabel, deviceTypeBox, roomLabel, roomBox, stateLabel, deviceStateValueLabel, buttonBar);
         editorCard.setPadding(new Insets(32));
