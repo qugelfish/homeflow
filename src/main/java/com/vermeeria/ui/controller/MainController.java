@@ -108,10 +108,6 @@ public class MainController {
         updateStatus("Scenarios view opened");
     }
 
-    private void showView(final Parent view) {
-        mainView.getContentArea().getChildren().setAll(view);
-    }
-
     /**
      * Returns the root view of the controller.
      *
