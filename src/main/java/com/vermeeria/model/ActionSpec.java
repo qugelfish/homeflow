@@ -9,20 +9,14 @@ import java.util.List;
  *
  * @author Jette
  */
-public record ActionSpec(
-        String actionKey,
-        String label,
-        ActionParameterKind parameterKind,
-        String parameterLabel,
-        List<String> allowedValues
-) {
+public record ActionSpec(String actionKey, String label, ActionParameterKind parameterKind, String parameterLabel, List<String> allowedValues) {
 
     /**
      * Creates an action specification without predefined selectable values.
      *
-     * @param actionKey the technical action key
-     * @param label the user-facing action label
-     * @param parameterKind the expected parameter kind
+     * @param actionKey      the technical action key
+     * @param label          the user-facing action label
+     * @param parameterKind  the expected parameter kind
      * @param parameterLabel the user-facing parameter label
      */
     public ActionSpec(final String actionKey, final String label, final ActionParameterKind parameterKind, final String parameterLabel) {
