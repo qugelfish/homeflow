@@ -59,7 +59,6 @@ public class RoomView {
         subtitleLabel.setWrapText(true);
 
         roomsList.getStyleClass().add("navigation-list");
-        // TODO let the controller populate the list with real room entries
         VBox.setVgrow(roomsList, Priority.ALWAYS);
 
         VBox listCard = new VBox(12, titleLabel, subtitleLabel, roomsList);

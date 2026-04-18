@@ -197,4 +197,12 @@ public class RoomController {
     public Parent getView() {
         return roomView.getRoot();
     }
+
+    /**
+     * Reloads the current room data into the view.
+     */
+    public void refresh() {
+        loadRooms();
+        handleRoomSelection();
+    }
 }
