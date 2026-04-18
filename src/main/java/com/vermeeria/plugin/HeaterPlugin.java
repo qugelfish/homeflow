@@ -62,7 +62,8 @@ public class HeaterPlugin implements DevicePlugin {
         return List.of(
                 new ActionSpec("setTargetTemperature", "Set target temperature", ActionParameterKind.TEMPERATURE, "Target temperature"),
                 new ActionSpec("turnOff", "Turn off", ActionParameterKind.NONE, ""),
-                new ActionSpec("turnOn", "Turn on", ActionParameterKind.NONE, ""));
+                new ActionSpec("turnOn", "Turn on", ActionParameterKind.NONE, "")
+        );
     }
 
     /**
