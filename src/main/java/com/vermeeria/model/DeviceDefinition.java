@@ -119,4 +119,14 @@ public class DeviceDefinition {
     public void setCurrentState(final Map<String, Object> currentState) {
         this.currentState = currentState;
     }
+
+    /**
+     * Returns the device name for UI lists.
+     *
+     * @return the device name
+     */
+    @Override
+    public String toString() {
+        return name;
+    }
 }

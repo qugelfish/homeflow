@@ -29,7 +29,6 @@ public class MainView {
     private final StackPane contentArea;
     private final Label statusLabel;
     private final ListView<String> navigationList;
-    private final Button newButton;
     private final Button loadButton;
     private final Button saveButton;
     private final Button executeButton;
@@ -42,7 +41,6 @@ public class MainView {
         this.contentArea = new StackPane();
         this.statusLabel = new Label("Ready");
         this.navigationList = new ListView<>();
-        this.newButton = new Button("New");
         this.loadButton = new Button("Load");
         this.saveButton = new Button("Save");
         this.executeButton = new Button("Run Scenario");
@@ -94,7 +92,6 @@ public class MainView {
 
         ToolBar toolBar = new ToolBar(
                 brandBox,
-                newButton,
                 loadButton,
                 saveButton,
                 executeButton,
@@ -198,15 +195,6 @@ public class MainView {
      */
     public ListView<String> getNavigationList() {
         return navigationList;
-    }
-
-    /**
-     * Returns the new-project button.
-     *
-     * @return the new button
-     */
-    public Button getNewButton() {
-        return newButton;
     }
 
     /**

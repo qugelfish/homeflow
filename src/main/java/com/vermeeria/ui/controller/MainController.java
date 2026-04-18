@@ -1,7 +1,9 @@
 package com.vermeeria.ui.controller;
 
+import com.vermeeria.service.DeviceService;
 import com.vermeeria.service.RoomService;
 import com.vermeeria.service.SmartHomeService;
+import com.vermeeria.ui.view.DeviceView;
 import com.vermeeria.ui.view.MainView;
 import com.vermeeria.ui.view.RoomView;
 import javafx.scene.Parent;
@@ -16,18 +18,23 @@ public class MainController {
     private final SmartHomeService smartHomeService;
     private final MainView mainView;
     private final RoomController roomController;
+    private final DeviceController deviceController;
 
     /**
      * Creates the main controller and initializes the basic user interface.
      *
      * @param smartHomeService the central application service
      */
-    public MainController(SmartHomeService smartHomeService, RoomService roomService) {
+    public MainController(final SmartHomeService smartHomeService,
+                          final RoomService roomService,
+                          final DeviceService deviceService) {
         this.smartHomeService = smartHomeService;
         this.mainView = new MainView();
 
         RoomView roomView = new RoomView();
+        DeviceView deviceView = new DeviceView();
         this.roomController = new RoomController(roomView, roomService, this::updateStatus);
+        this.deviceController = new DeviceController(deviceView, deviceService, this::updateStatus);
 
         wireActions();
         showRoomsView();
@@ -45,16 +52,9 @@ public class MainController {
             }
         });
 
-        mainView.getNewButton().setOnAction(event -> handleNewProject());
         mainView.getLoadButton().setOnAction(event -> handleLoadProject());
         mainView.getSaveButton().setOnAction(event -> handleSaveProject());
         mainView.getExecuteButton().setOnAction(event -> handleExecuteScenario());
-    }
-
-    private void handleNewProject() {
-        smartHomeService.resetAppData();
-        refreshCurrentView();
-        updateStatus("Created a new empty project");
     }
 
     private void handleLoadProject() {
@@ -88,12 +88,14 @@ public class MainController {
     }
 
     private void showRoomsView() {
+        roomController.refresh();
         mainView.getContentArea().getChildren().setAll(roomController.getView());
         updateStatus("Rooms view opened");
     }
 
     private void showDevicesView() {
-        showView(mainView.createSectionPlaceholder("Devices", "This area will later host the dedicated device management view.", "Current device count: " + smartHomeService.getDeviceCount()));
+        deviceController.refresh();
+        mainView.getContentArea().getChildren().setAll(deviceController.getView());
         updateStatus("Devices view opened");
     }
 

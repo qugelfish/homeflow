@@ -2,6 +2,7 @@ package com.vermeeria.app;
 
 import com.vermeeria.persistence.JsonSmartHomeRepository;
 import com.vermeeria.persistence.SmartHomeRepository;
+import com.vermeeria.service.DeviceService;
 import com.vermeeria.service.RoomService;
 import com.vermeeria.service.SmartHomeService;
 import com.vermeeria.ui.controller.MainController;
@@ -28,17 +29,15 @@ public class SmartHomeApplication extends Application {
      */
     @Override
     public void start(final Stage stage) {
-        SmartHomeRepository repository =
-                new JsonSmartHomeRepository(Path.of("data", "app-data.json"));
+        SmartHomeRepository repository = new JsonSmartHomeRepository(Path.of("data", "app-data.json"));
 
         SmartHomeService smartHomeService = new SmartHomeService(repository);
         RoomService roomService = new RoomService(smartHomeService);
-        MainController mainController = new MainController(smartHomeService, roomService);
+        DeviceService deviceService = new DeviceService(smartHomeService);
+        MainController mainController = new MainController(smartHomeService, roomService, deviceService);
 
         Scene scene = new Scene(mainController.getView(), 1280, 820);
-        scene.getStylesheets().add(
-                Objects.requireNonNull(getClass().getResource("/styles/app.css")).toExternalForm()
-        );
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styles/app.css")).toExternalForm());
 
         stage.setTitle(APP_NAME);
         stage.setScene(scene);

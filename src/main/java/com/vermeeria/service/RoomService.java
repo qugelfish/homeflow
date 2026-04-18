@@ -3,7 +3,6 @@ package com.vermeeria.service;
 import com.vermeeria.model.Room;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Provides room-related business logic.

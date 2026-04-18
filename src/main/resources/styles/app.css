@@ -104,6 +104,7 @@
 }
 
 .text-field,
+.combo-box,
 .form-input {
     -fx-background-color: #0a0f14;
     -fx-background-insets: 0;
@@ -119,15 +120,88 @@
 }
 
 .text-field:focused,
+.combo-box:focused,
 .form-input:focused {
     -fx-background-color: #0a0f14;
     -fx-border-color: #58a6ff;
 }
 
 .text-field .content,
+.combo-box .list-cell,
 .form-input .content {
     -fx-background-color: #0a0f14;
     -fx-background-radius: 8;
+}
+
+.combo-box {
+    -fx-min-height: 40;
+}
+
+.combo-box .arrow-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0 8 8 0;
+}
+
+.combo-box .arrow {
+    -fx-background-color: #c9d1d9;
+}
+
+.combo-box .list-cell {
+    -fx-text-fill: #f0f6fc;
+    -fx-padding: 8 12 8 12;
+}
+
+.combo-box-popup .list-view {
+    -fx-background-color: #0a0f14;
+    -fx-border-color: #30363d;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+}
+
+.combo-box-popup .list-cell {
+    -fx-background-color: #0a0f14;
+    -fx-text-fill: #f0f6fc;
+}
+
+.combo-box-popup .list-cell:hover {
+    -fx-background-color: #21262d;
+}
+
+.combo-box-popup .list-cell:selected {
+    -fx-background-color: #1f6feb;
+    -fx-text-fill: #ffffff;
+}
+
+.combo-box:disabled,
+.form-input:disabled {
+    -fx-opacity: 1;
+    -fx-background-color: #0a0f14;
+    -fx-border-color: #30363d;
+}
+
+.combo-box:disabled .list-cell,
+.text-field:disabled,
+.form-input:disabled {
+    -fx-background-color: #0a0f14;
+    -fx-text-fill: #f0f6fc;
+}
+
+.combo-box:disabled .list-cell {
+    -fx-background-color: #0a0f14;
+    -fx-text-fill: #f0f6fc;
+}
+
+.combo-box:disabled .arrow-button {
+    -fx-background-color: transparent;
+}
+
+.combo-box:disabled .arrow {
+    -fx-background-color: #c9d1d9;
+}
+
+.state-value {
+    -fx-text-fill: #f0f6fc;
+    -fx-line-spacing: 4px;
 }
 
 .tool-bar .label,
@@ -157,4 +231,20 @@
 
 .button:focused {
     -fx-border-color: #58a6ff;
+}
+
+.success-button {
+    -fx-text-fill: #3fb950;
+}
+
+.success-button:hover {
+    -fx-text-fill: #56d364;
+}
+
+.danger-button {
+    -fx-text-fill: #f85149;
+}
+
+.danger-button:hover {
+    -fx-text-fill: #ff7b72;
 }
