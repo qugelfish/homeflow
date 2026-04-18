@@ -4,6 +4,7 @@ import com.vermeeria.persistence.JsonSmartHomeRepository;
 import com.vermeeria.persistence.SmartHomeRepository;
 import com.vermeeria.service.DeviceService;
 import com.vermeeria.service.RoomService;
+import com.vermeeria.service.ScenarioService;
 import com.vermeeria.service.SmartHomeService;
 import com.vermeeria.ui.controller.MainController;
 import javafx.application.Application;
@@ -34,7 +35,8 @@ public class SmartHomeApplication extends Application {
         SmartHomeService smartHomeService = new SmartHomeService(repository);
         RoomService roomService = new RoomService(smartHomeService);
         DeviceService deviceService = new DeviceService(smartHomeService);
-        MainController mainController = new MainController(smartHomeService, roomService, deviceService);
+        ScenarioService scenarioService = new ScenarioService(smartHomeService);
+        MainController mainController = new MainController(smartHomeService, roomService, deviceService, scenarioService);
 
         Scene scene = new Scene(mainController.getView(), 1280, 820);
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styles/app.css")).toExternalForm());

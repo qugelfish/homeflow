@@ -97,4 +97,17 @@ public class ScenarioAction {
     public void setParameterValue(final String parameterValue) {
         this.parameterValue = parameterValue;
     }
+
+    /**
+     * Returns a compact label for UI lists.
+     *
+     * @return the action label
+     */
+    @Override
+    public String toString() {
+        if (parameterValue == null || parameterValue.isBlank()) {
+            return actionKey;
+        }
+        return actionKey + " (" + parameterValue + ")";
+    }
 }

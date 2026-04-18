@@ -2,10 +2,12 @@ package com.vermeeria.ui.controller;
 
 import com.vermeeria.service.DeviceService;
 import com.vermeeria.service.RoomService;
+import com.vermeeria.service.ScenarioService;
 import com.vermeeria.service.SmartHomeService;
 import com.vermeeria.ui.view.DeviceView;
 import com.vermeeria.ui.view.MainView;
 import com.vermeeria.ui.view.RoomView;
+import com.vermeeria.ui.view.ScenarioView;
 import javafx.scene.Parent;
 
 /**
@@ -19,22 +21,23 @@ public class MainController {
     private final MainView mainView;
     private final RoomController roomController;
     private final DeviceController deviceController;
+    private final ScenarioController scenarioController;
 
     /**
      * Creates the main controller and initializes the basic user interface.
      *
      * @param smartHomeService the central application service
      */
-    public MainController(final SmartHomeService smartHomeService,
-                          final RoomService roomService,
-                          final DeviceService deviceService) {
+    public MainController(final SmartHomeService smartHomeService, final RoomService roomService, final DeviceService deviceService, final ScenarioService scenarioService) {
         this.smartHomeService = smartHomeService;
         this.mainView = new MainView();
 
         RoomView roomView = new RoomView();
         DeviceView deviceView = new DeviceView();
+        ScenarioView scenarioView = new ScenarioView();
         this.roomController = new RoomController(roomView, roomService, this::updateStatus);
         this.deviceController = new DeviceController(deviceView, deviceService, this::updateStatus);
+        this.scenarioController = new ScenarioController(scenarioView, scenarioService, this::updateStatus);
 
         wireActions();
         showRoomsView();
@@ -100,12 +103,9 @@ public class MainController {
     }
 
     private void showScenariosView() {
-        showView(mainView.createSectionPlaceholder("Scenarios", "This area will later host the dedicated scenario management view.", "Current scenario count: " + smartHomeService.getScenarioCount()));
+        scenarioController.refresh();
+        mainView.getContentArea().getChildren().setAll(scenarioController.getView());
         updateStatus("Scenarios view opened");
-    }
-
-    private void showView(final Parent view) {
-        mainView.getContentArea().getChildren().setAll(view);
     }
 
     /**

@@ -120,6 +120,12 @@ public class DeviceController {
     }
 
     private void handleDeleteDevice() {
+        if (createMode) {
+            leaveCreateMode();
+            statusUpdater.accept("Device creation cancelled");
+            return;
+        }
+
         DeviceDefinition selectedDevice = deviceView.getDevicesList().getSelectionModel().getSelectedItem();
         if (selectedDevice == null) {
             statusUpdater.accept("Please select a device to delete");
@@ -241,7 +247,8 @@ public class DeviceController {
             deviceView.getRoomBox().getSelectionModel().selectFirst();
         }
         deviceView.getEditDeviceButton().setDisable(true);
-        deviceView.getDeleteDeviceButton().setDisable(true);
+        deviceView.getDeleteDeviceButton().setDisable(false);
+        deviceView.getDeleteDeviceButton().setText("Cancel");
         deviceView.getAddDeviceButton().setText("Save device");
         deviceView.getDeviceStateValueLabel().setText("Default state will be applied automatically");
         deviceView.getDeviceNameField().requestFocus();
@@ -252,6 +259,7 @@ public class DeviceController {
         deviceView.getDevicesList().setDisable(false);
         setFormDisabled(true);
         deviceView.getAddDeviceButton().setText("Add device");
+        deviceView.getDeleteDeviceButton().setText("Delete device");
         handleDeviceSelection();
     }
 

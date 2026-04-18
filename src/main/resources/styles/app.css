@@ -104,6 +104,7 @@
 }
 
 .text-field,
+.text-area,
 .combo-box,
 .form-input {
     -fx-background-color: #0a0f14;
@@ -120,6 +121,7 @@
 }
 
 .text-field:focused,
+.text-area:focused,
 .combo-box:focused,
 .form-input:focused {
     -fx-background-color: #0a0f14;
@@ -127,10 +129,20 @@
 }
 
 .text-field .content,
+.text-area .content,
 .combo-box .list-cell,
 .form-input .content {
     -fx-background-color: #0a0f14;
     -fx-background-radius: 8;
+}
+
+.text-area {
+    -fx-control-inner-background: #0a0f14;
+}
+
+.text-area .scroll-pane,
+.text-area .scroll-pane .viewport {
+    -fx-background-color: transparent;
 }
 
 .combo-box {
@@ -181,6 +193,7 @@
 
 .combo-box:disabled .list-cell,
 .text-field:disabled,
+.text-area:disabled,
 .form-input:disabled {
     -fx-background-color: #0a0f14;
     -fx-text-fill: #f0f6fc;
@@ -231,6 +244,39 @@
 
 .button:focused {
     -fx-border-color: #58a6ff;
+}
+
+.scroll-bar:vertical,
+.scroll-bar:horizontal {
+    -fx-background-color: transparent;
+    -fx-padding: 2;
+}
+
+.scroll-bar .track {
+    -fx-background-color: #161b22;
+    -fx-background-radius: 8;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #30363d;
+    -fx-background-radius: 8;
+}
+
+.scroll-bar .thumb:hover {
+    -fx-background-color: #484f58;
+}
+
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.scroll-bar .increment-arrow,
+.scroll-bar .decrement-arrow {
+    -fx-background-color: transparent;
+    -fx-shape: "";
+    -fx-padding: 0;
 }
 
 .success-button {
