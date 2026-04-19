@@ -56,8 +56,7 @@
                 </executions>
                 <configuration>
                     <configLocation>checkstyle.xml</configLocation>
-                    <skip>true</skip>
-                    <failsOnError>false</failsOnError>
+                    <failsOnError>true</failsOnError>
                     <consoleOutput>true</consoleOutput>
                 </configuration>
             </plugin>
@@ -77,8 +76,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <skip>true</skip>
-                    <failOnViolation>false</failOnViolation>
+                    <failOnViolation>true</failOnViolation>
                 </configuration>
             </plugin>
 
@@ -96,8 +94,8 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <skip>true</skip>
-                    <failOnError>false</failOnError>
+                    <failOnError>true</failOnError>
+                    <excludeFilterFile>spotbugs-exclude.xml</excludeFilterFile>
                 </configuration>
             </plugin>
 

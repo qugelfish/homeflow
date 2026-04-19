@@ -29,6 +29,7 @@ public class ScenarioView {
     private final TextArea scenarioDescriptionArea;
     private final ListView<ScenarioAction> actionsList;
     private final Button addScenarioButton;
+    private final Button runScenarioButton;
     private final Button editScenarioButton;
     private final Button deleteScenarioButton;
     private final Button editActionButton;
@@ -43,10 +44,12 @@ public class ScenarioView {
         this.scenarioDescriptionArea = new TextArea();
         this.actionsList = new ListView<>();
         this.addScenarioButton = new Button("Add scenario");
+        this.runScenarioButton = new Button("▶");
         this.editScenarioButton = new Button("✎");
         this.deleteScenarioButton = new Button("Delete scenario");
         this.editActionButton = new Button("Edit actions");
 
+        this.runScenarioButton.setTooltip(new Tooltip("Run scenario"));
         this.editScenarioButton.setTooltip(new Tooltip("Edit scenario"));
         this.addScenarioButton.getStyleClass().add("success-button");
         this.deleteScenarioButton.getStyleClass().add("danger-button");
@@ -107,9 +110,11 @@ public class ScenarioView {
 
         actionsList.getStyleClass().add("navigation-list");
         actionsList.setDisable(true);
+        actionsList.setMinHeight(180);
+        actionsList.setPrefHeight(220);
         VBox.setVgrow(actionsList, Priority.ALWAYS);
 
-        HBox scenarioNameBar = new HBox(10, scenarioNameField, editScenarioButton);
+        HBox scenarioNameBar = new HBox(10, scenarioNameField, runScenarioButton, editScenarioButton);
         Region actionsHeaderSpacer = new Region();
         HBox.setHgrow(actionsHeaderSpacer, Priority.ALWAYS);
         HBox actionsHeaderBar = new HBox(10, actionsLabel, actionsHeaderSpacer, editActionButton);
@@ -178,6 +183,15 @@ public class ScenarioView {
      */
     public Button getAddScenarioButton() {
         return addScenarioButton;
+    }
+
+    /**
+     * Returns the run-scenario button.
+     *
+     * @return the run button
+     */
+    public Button getRunScenarioButton() {
+        return runScenarioButton;
     }
 
     /**

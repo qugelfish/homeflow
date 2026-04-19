@@ -1,11 +1,13 @@
 package com.vermeeria.ui.view;
 
+import com.vermeeria.model.ExecutionLogEntry;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ToolBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -25,10 +27,14 @@ import java.io.InputStream;
  */
 public class MainView {
 
+    private static final String EXECUTION_LOG = "Execution Log";
     private final BorderPane root;
     private final StackPane contentArea;
     private final Label statusLabel;
     private final ListView<String> navigationList;
+    private final ListView<ExecutionLogEntry> executionLogList;
+    private final VBox executionLogPanel;
+    private final Button toggleLogButton;
     private final Button loadButton;
     private final Button saveButton;
     private final Button executeButton;
@@ -41,6 +47,9 @@ public class MainView {
         this.contentArea = new StackPane();
         this.statusLabel = new Label("Ready");
         this.navigationList = new ListView<>();
+        this.executionLogList = new ListView<>();
+        this.executionLogPanel = new VBox(10);
+        this.toggleLogButton = new Button(EXECUTION_LOG);
         this.loadButton = new Button("Load");
         this.saveButton = new Button("Save");
         this.executeButton = new Button("Run Scenario");
@@ -54,7 +63,7 @@ public class MainView {
         root.setTop(createToolbar());
         root.setLeft(createNavigation());
         root.setCenter(createContentArea());
-        root.setBottom(createStatusBar());
+        root.setBottom(createBottomArea());
     }
 
     private ToolBar createToolbar() {
@@ -90,13 +99,7 @@ public class MainView {
         HBox spacer = new HBox();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        ToolBar toolBar = new ToolBar(
-                brandBox,
-                loadButton,
-                saveButton,
-                executeButton,
-                spacer
-        );
+        ToolBar toolBar = new ToolBar(brandBox, loadButton, saveButton, executeButton, spacer);
 
         toolBar.getStyleClass().add("top-toolbar");
         toolBar.setMinHeight(68);
@@ -123,7 +126,13 @@ public class MainView {
     private Parent createContentArea() {
         contentArea.setPadding(new Insets(24));
         contentArea.getStyleClass().add("content-area");
-        return contentArea;
+
+        ScrollPane contentScrollPane = new ScrollPane(contentArea);
+        contentScrollPane.setFitToWidth(true);
+        contentScrollPane.setFitToHeight(false);
+        contentScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        contentScrollPane.getStyleClass().add("content-scroll");
+        return contentScrollPane;
     }
 
     /**
@@ -134,9 +143,7 @@ public class MainView {
      * @param metaInformation short additional status text
      * @return the placeholder view
      */
-    public Parent createSectionPlaceholder(final String title,
-                                           final String description,
-                                           final String metaInformation) {
+    public Parent createSectionPlaceholder(final String title, final String description, final String metaInformation) {
         Label titleLabel = new Label(title);
         titleLabel.getStyleClass().add("content-title");
 
@@ -154,11 +161,28 @@ public class MainView {
         return placeholderBox;
     }
 
-    private HBox createStatusBar() {
-        HBox statusBar = new HBox(statusLabel);
+    private Parent createBottomArea() {
+        Label logTitle = new Label(EXECUTION_LOG);
+        logTitle.getStyleClass().add("section-title");
+
+        executionLogList.getStyleClass().add("navigation-list");
+        executionLogList.setPrefHeight(180);
+        executionLogList.setPlaceholder(new Label("No scenario execution has been logged yet."));
+
+        executionLogPanel.getChildren().setAll(logTitle, executionLogList);
+        executionLogPanel.setPadding(new Insets(14, 16, 12, 16));
+        executionLogPanel.getStyleClass().add("log-panel");
+        executionLogPanel.setVisible(false);
+        executionLogPanel.setManaged(false);
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        HBox statusBar = new HBox(statusLabel, spacer, toggleLogButton);
+        statusBar.setAlignment(Pos.CENTER_LEFT);
         statusBar.setPadding(new Insets(10, 16, 10, 16));
         statusBar.getStyleClass().add("status-bar");
-        return statusBar;
+        return new VBox(executionLogPanel, statusBar);
     }
 
     /**
@@ -222,5 +246,34 @@ public class MainView {
      */
     public Button getExecuteButton() {
         return executeButton;
+    }
+
+    /**
+     * Returns the execution log list.
+     *
+     * @return the execution log list
+     */
+    public ListView<ExecutionLogEntry> getExecutionLogList() {
+        return executionLogList;
+    }
+
+    /**
+     * Returns the log toggle button.
+     *
+     * @return the toggle button
+     */
+    public Button getToggleLogButton() {
+        return toggleLogButton;
+    }
+
+    /**
+     * Expands or collapses the execution log area.
+     *
+     * @param expanded whether the log area should be visible
+     */
+    public void setLogExpanded(final boolean expanded) {
+        executionLogPanel.setVisible(expanded);
+        executionLogPanel.setManaged(expanded);
+        toggleLogButton.setText(EXECUTION_LOG);
     }
 }

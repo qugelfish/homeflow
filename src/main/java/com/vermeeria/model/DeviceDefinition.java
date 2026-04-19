@@ -1,6 +1,7 @@
 package com.vermeeria.model;
 
 import java.util.LinkedHashMap;
+import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
 
@@ -108,7 +109,7 @@ public class DeviceDefinition {
      * @return the state map
      */
     public Map<String, Object> getCurrentState() {
-        return currentState;
+        return Collections.unmodifiableMap(currentState);
     }
 
     /**
@@ -117,7 +118,7 @@ public class DeviceDefinition {
      * @param currentState the state map
      */
     public void setCurrentState(final Map<String, Object> currentState) {
-        this.currentState = currentState;
+        this.currentState = currentState == null ? new LinkedHashMap<>() : new LinkedHashMap<>(currentState);
     }
 
     /**

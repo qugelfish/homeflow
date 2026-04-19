@@ -46,7 +46,10 @@ public class DevicePluginRegistry {
      * @return the available plugins
      */
     public List<DevicePlugin> getAllPlugins() {
-        return pluginsByTypeKey.values().stream().sorted(Comparator.comparing(DevicePlugin::getDisplayName, String.CASE_INSENSITIVE_ORDER)).toList();
+        return pluginsByTypeKey.values()
+                .stream()
+                .sorted(Comparator.comparing(DevicePlugin::getDisplayName, String.CASE_INSENSITIVE_ORDER))
+                .toList();
     }
 
     /**
@@ -75,7 +78,9 @@ public class DevicePluginRegistry {
 
     private void loadPlugins() {
         try {
-            Enumeration<URL> resources = Thread.currentThread().getContextClassLoader().getResources(PLUGIN_PACKAGE_PATH);
+            Enumeration<URL> resources = Thread.currentThread()
+                    .getContextClassLoader()
+                    .getResources(PLUGIN_PACKAGE_PATH);
 
             while (resources.hasMoreElements()) {
                 URL resource = resources.nextElement();

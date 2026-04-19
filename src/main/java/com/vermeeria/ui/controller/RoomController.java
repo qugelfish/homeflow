@@ -17,6 +17,7 @@ public class RoomController {
     private final RoomView roomView;
     private final RoomService roomService;
     private final Consumer<String> statusUpdater;
+    private final Consumer<Boolean> navigationLockUpdater;
     private boolean editMode;
     private boolean createMode;
 
@@ -26,11 +27,16 @@ public class RoomController {
      * @param roomView the room view
      * @param roomService the room service
      * @param statusUpdater the callback used to update status messages
+     * @param navigationLockUpdater the callback used to lock navigation
      */
-    public RoomController(RoomView roomView, RoomService roomService, Consumer<String> statusUpdater) {
+    public RoomController(RoomView roomView,
+                          RoomService roomService,
+                          Consumer<String> statusUpdater,
+                          Consumer<Boolean> navigationLockUpdater) {
         this.roomView = roomView;
         this.roomService = roomService;
         this.statusUpdater = statusUpdater;
+        this.navigationLockUpdater = navigationLockUpdater;
         this.editMode = false;
         this.createMode = false;
 
@@ -48,7 +54,13 @@ public class RoomController {
     }
 
     private void handleAddRoom() {
-        if (!createMode) {
+        if (editMode) {
+            statusUpdater.accept("Please save the current room changes first");
+            return;
+        }
+
+        Room selectedRoom = roomView.getRoomsList().getSelectionModel().getSelectedItem();
+        if (!createMode && selectedRoom != null) {
             enterCreateMode();
             statusUpdater.accept("Enter a name for the new room");
             return;
@@ -104,6 +116,11 @@ public class RoomController {
     }
 
     private void handleDeleteRoom() {
+        if (editMode) {
+            statusUpdater.accept("Please save the current room changes first");
+            return;
+        }
+
         if (createMode) {
             leaveCreateMode();
             statusUpdater.accept("Room creation cancelled");
@@ -153,7 +170,8 @@ public class RoomController {
         if (roomSelected && !createMode && !editMode) {
             roomView.getRoomNameField().setText(selectedRoom.getName());
         } else if (!roomSelected && !createMode) {
-            roomView.getRoomNameField().clear();
+            activateNewRoomMode();
+            return;
         }
 
         if (!editMode && !createMode) {
@@ -166,6 +184,9 @@ public class RoomController {
         editMode = true;
         roomView.getRoomsList().setDisable(true);
         roomView.getRoomNameField().setDisable(false);
+        navigationLockUpdater.accept(true);
+        roomView.getAddRoomButton().setDisable(true);
+        roomView.getDeleteRoomButton().setDisable(true);
         roomView.getEditRoomButton().setText("Save");
         roomView.getRoomNameField().requestFocus();
         roomView.getRoomNameField().positionCaret(roomView.getRoomNameField().getText().length());
@@ -175,6 +196,8 @@ public class RoomController {
         editMode = false;
         roomView.getRoomsList().setDisable(false);
         roomView.getRoomNameField().setDisable(true);
+        navigationLockUpdater.accept(false);
+        roomView.getAddRoomButton().setDisable(false);
         roomView.getEditRoomButton().setText("✎");
     }
 
@@ -199,6 +222,16 @@ public class RoomController {
         roomView.getAddRoomButton().setText("Add room");
         roomView.getDeleteRoomButton().setText("Delete room");
         handleRoomSelection();
+    }
+
+    private void activateNewRoomMode() {
+        roomView.getRoomNameField().clear();
+        roomView.getRoomNameField().setDisable(false);
+        roomView.getEditRoomButton().setDisable(true);
+        roomView.getDeleteRoomButton().setDisable(true);
+        roomView.getEditRoomButton().setText("✎");
+        roomView.getDeleteRoomButton().setText("Delete room");
+        roomView.getAddRoomButton().setText("Add room");
     }
 
     /**

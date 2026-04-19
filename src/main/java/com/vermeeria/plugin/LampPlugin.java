@@ -19,7 +19,7 @@ public class LampPlugin implements DevicePlugin {
     private static final String POWER_KEY = "power";
     private static final String BRIGHTNESS_KEY = "brightness";
     private static final String COLOR_KEY = "color";
-    private static final List<String> AVAILABLE_COLORS = List.of("WHITE", "WARM_WHITE", "BLUE", "RED", "GREEN");
+    private static final List<String> AVAILABLE_COLORS = List.of("White", "Warm White", "Blue", "Red", "Green");
 
     /**
      * Returns the technical type key used for this plugin.
@@ -96,7 +96,7 @@ public class LampPlugin implements DevicePlugin {
                     throw new IllegalArgumentException("Lamp color cannot be empty.");
                 }
 
-                String normalizedColor = parameterValue.trim().toUpperCase();
+                String normalizedColor = parameterValue.trim();
                 if (!AVAILABLE_COLORS.contains(normalizedColor)) {
                     throw new IllegalArgumentException("Unsupported lamp color: " + parameterValue);
                 }
@@ -127,7 +127,7 @@ public class LampPlugin implements DevicePlugin {
     public String formatState(Map<String, Object> state) {
         boolean power = Boolean.TRUE.equals(state.get(POWER_KEY));
         Object brightness = state.getOrDefault(BRIGHTNESS_KEY, 50);
-        Object color = state.getOrDefault(COLOR_KEY, "WHITE");
+        Object color = state.getOrDefault(COLOR_KEY, "White");
         return power ? color + ", " + brightness + " %" : "Off";
     }
 }

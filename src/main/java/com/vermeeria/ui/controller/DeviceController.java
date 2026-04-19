@@ -20,20 +20,23 @@ public class DeviceController {
     private final DeviceView deviceView;
     private final DeviceService deviceService;
     private final Consumer<String> statusUpdater;
+    private final Consumer<Boolean> navigationLockUpdater;
     private boolean editMode;
     private boolean createMode;
 
     /**
      * Creates the device controller and initializes the device controls.
      *
-     * @param deviceView    the device view
-     * @param deviceService the device service
-     * @param statusUpdater the callback used to update status messages
+     * @param deviceView            the device view
+     * @param deviceService         the device service
+     * @param statusUpdater         the callback used to update status messages
+     * @param navigationLockUpdater the callback used to lock navigation
      */
-    public DeviceController(final DeviceView deviceView, final DeviceService deviceService, final Consumer<String> statusUpdater) {
+    public DeviceController(final DeviceView deviceView, final DeviceService deviceService, final Consumer<String> statusUpdater, final Consumer<Boolean> navigationLockUpdater) {
         this.deviceView = deviceView;
         this.deviceService = deviceService;
         this.statusUpdater = statusUpdater;
+        this.navigationLockUpdater = navigationLockUpdater;
         this.editMode = false;
         this.createMode = false;
 
@@ -69,7 +72,9 @@ public class DeviceController {
     }
 
     private void wireActions() {
-        deviceView.getDevicesList().getSelectionModel().selectedItemProperty()
+        deviceView.getDevicesList()
+                .getSelectionModel()
+                .selectedItemProperty()
                 .addListener((observable, oldValue, newValue) -> handleDeviceSelection());
         deviceView.getAddDeviceButton().setOnAction(event -> handleAddDevice());
         deviceView.getEditDeviceButton().setOnAction(event -> handleEditDevice());
@@ -77,14 +82,21 @@ public class DeviceController {
     }
 
     private void handleAddDevice() {
-        if (!createMode) {
+        if (editMode) {
+            statusUpdater.accept("Please save the current device changes first");
+            return;
+        }
+
+        DeviceDefinition selectedDevice = deviceView.getDevicesList().getSelectionModel().getSelectedItem();
+        if (!createMode && selectedDevice != null) {
             enterCreateMode();
             statusUpdater.accept("Enter the details for the new device");
             return;
         }
 
         try {
-            deviceService.createDevice(deviceView.getDeviceNameField().getText(), getSelectedTypeKey(), getSelectedRoomId());
+            deviceService.createDevice(deviceView.getDeviceNameField()
+                    .getText(), getSelectedTypeKey(), getSelectedRoomId());
             refresh();
             leaveCreateMode();
             statusUpdater.accept("Device created");
@@ -110,7 +122,8 @@ public class DeviceController {
         }
 
         try {
-            deviceService.updateDevice(selectedDevice.getId(), deviceView.getDeviceNameField().getText(), getSelectedTypeKey(), getSelectedRoomId());
+            deviceService.updateDevice(selectedDevice.getId(), deviceView.getDeviceNameField()
+                    .getText(), getSelectedTypeKey(), getSelectedRoomId());
             refresh(selectedDevice.getId());
             leaveEditMode();
             statusUpdater.accept("Device updated");
@@ -120,6 +133,11 @@ public class DeviceController {
     }
 
     private void handleDeleteDevice() {
+        if (editMode) {
+            statusUpdater.accept("Please save the current device changes first");
+            return;
+        }
+
         if (createMode) {
             leaveCreateMode();
             statusUpdater.accept("Device creation cancelled");
@@ -156,7 +174,9 @@ public class DeviceController {
     private void loadDevices(final String deviceIdToReselect) {
         deviceView.getDevicesList().getItems().setAll(deviceService.getAllDevices());
         if (deviceIdToReselect != null) {
-            deviceView.getDevicesList().getItems().stream()
+            deviceView.getDevicesList()
+                    .getItems()
+                    .stream()
                     .filter(device -> deviceIdToReselect.equals(device.getId()))
                     .findFirst()
                     .ifPresent(device -> deviceView.getDevicesList().getSelectionModel().select(device));
@@ -181,7 +201,8 @@ public class DeviceController {
             selectRoomById(selectedDevice.getRoomId());
             deviceView.getDeviceStateValueLabel().setText(deviceService.formatDeviceStateDetails(selectedDevice));
         } else if (!deviceSelected && !createMode) {
-            clearForm();
+            activateNewDeviceMode();
+            return;
         }
 
         if (!editMode && !createMode) {
@@ -191,14 +212,18 @@ public class DeviceController {
     }
 
     private void selectPluginByTypeKey(final String typeKey) {
-        deviceView.getDeviceTypeBox().getItems().stream()
+        deviceView.getDeviceTypeBox()
+                .getItems()
+                .stream()
                 .filter(plugin -> plugin.getTypeKey().equals(typeKey))
                 .findFirst()
                 .ifPresent(plugin -> deviceView.getDeviceTypeBox().getSelectionModel().select(plugin));
     }
 
     private void selectRoomById(final String roomId) {
-        deviceView.getRoomBox().getItems().stream()
+        deviceView.getRoomBox()
+                .getItems()
+                .stream()
                 .filter(room -> roomId.equals(room.getId()))
                 .findFirst()
                 .ifPresent(room -> deviceView.getRoomBox().getSelectionModel().select(room));
@@ -221,6 +246,9 @@ public class DeviceController {
         editMode = true;
         deviceView.getDevicesList().setDisable(true);
         setFormDisabled(false);
+        navigationLockUpdater.accept(true);
+        deviceView.getAddDeviceButton().setDisable(true);
+        deviceView.getDeleteDeviceButton().setDisable(true);
         deviceView.getEditDeviceButton().setText("Save");
         deviceView.getDeviceNameField().requestFocus();
         deviceView.getDeviceNameField().positionCaret(deviceView.getDeviceNameField().getText().length());
@@ -230,6 +258,8 @@ public class DeviceController {
         editMode = false;
         deviceView.getDevicesList().setDisable(false);
         setFormDisabled(true);
+        navigationLockUpdater.accept(false);
+        deviceView.getAddDeviceButton().setDisable(false);
         deviceView.getEditDeviceButton().setText("✎");
     }
 
@@ -261,6 +291,23 @@ public class DeviceController {
         deviceView.getAddDeviceButton().setText("Add device");
         deviceView.getDeleteDeviceButton().setText("Delete device");
         handleDeviceSelection();
+    }
+
+    private void activateNewDeviceMode() {
+        clearForm();
+        setFormDisabled(false);
+        if (!deviceView.getDeviceTypeBox().getItems().isEmpty()) {
+            deviceView.getDeviceTypeBox().getSelectionModel().selectFirst();
+        }
+        if (!deviceView.getRoomBox().getItems().isEmpty()) {
+            deviceView.getRoomBox().getSelectionModel().selectFirst();
+        }
+        deviceView.getEditDeviceButton().setDisable(true);
+        deviceView.getDeleteDeviceButton().setDisable(true);
+        deviceView.getEditDeviceButton().setText("✎");
+        deviceView.getDeleteDeviceButton().setText("Delete device");
+        deviceView.getAddDeviceButton().setText("Add device");
+        deviceView.getDeviceStateValueLabel().setText("Default state will be applied automatically");
     }
 
     /**

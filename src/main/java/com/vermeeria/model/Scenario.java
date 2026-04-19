@@ -2,6 +2,7 @@ package com.vermeeria.model;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -90,7 +91,7 @@ public class Scenario {
      * @return the scenario actions
      */
     public List<ScenarioAction> getActions() {
-        return actions;
+        return Collections.unmodifiableList(actions);
     }
 
     /**
@@ -99,7 +100,7 @@ public class Scenario {
      * @param actions the scenario actions
      */
     public void setActions(final List<ScenarioAction> actions) {
-        this.actions = actions;
+        this.actions = actions == null ? new ArrayList<>() : new ArrayList<>(actions);
     }
 
     /**

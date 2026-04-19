@@ -12,7 +12,7 @@ import java.nio.file.Path;
  * Stores and loads application data in JSON format.
  * The data is written to and read from a file on the local file system.
  *
- * @author Jette
+ * @author Jette, Dario
  */
 public class JsonSmartHomeRepository implements SmartHomeRepository {
 
@@ -64,7 +64,10 @@ public class JsonSmartHomeRepository implements SmartHomeRepository {
     @Override
     public void save(AppData appData) {
         try {
-            Files.createDirectories(filePath.getParent());
+            Path parentPath = filePath.getParent();
+            if (parentPath != null) {
+                Files.createDirectories(parentPath);
+            }
             objectMapper.writerWithDefaultPrettyPrinter().writeValue(filePath.toFile(), appData);
         } catch (IOException e) {
             throw new RuntimeException("Could not save app data.", e);
