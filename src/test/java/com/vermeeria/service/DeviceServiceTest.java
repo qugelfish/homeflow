@@ -39,12 +39,13 @@ class DeviceServiceTest {
     void testCreateDevice_ThrowsValidationException_WhenDeviceNameAlreadyExists() {
         AppData appData = new AppData();
         Room room = new Room("Living Room");
+        String roomId = room.getId();
         DeviceDefinition existingDevice = new DeviceDefinition("Floor Lamp", LAMP_TYPE, room.getId());
         appData.addRoom(room);
         appData.addDevice(existingDevice);
         DeviceService deviceService = ServiceTestHelper.createDeviceService(appData);
 
-        ValidationException exception = assertThrows(ValidationException.class, () -> deviceService.createDevice("Floor Lamp", LAMP_TYPE, room.getId()));
+        ValidationException exception = assertThrows(ValidationException.class, () -> deviceService.createDevice("Floor Lamp", LAMP_TYPE, roomId));
 
         assertEquals("A device with this name already exists.", exception.getMessage());
     }
@@ -56,10 +57,11 @@ class DeviceServiceTest {
     void testCreateDevice_ThrowsValidationException_WhenDeviceNameIsBlank(final String deviceName) {
         AppData appData = new AppData();
         Room room = new Room("Living Room");
+        String roomId = room.getId();
         appData.addRoom(room);
         DeviceService deviceService = ServiceTestHelper.createDeviceService(appData);
 
-        ValidationException exception = assertThrows(ValidationException.class, () -> deviceService.createDevice(deviceName, LAMP_TYPE, room.getId()));
+        ValidationException exception = assertThrows(ValidationException.class, () -> deviceService.createDevice(deviceName, LAMP_TYPE, roomId));
 
         assertEquals("Device name cannot be empty.", exception.getMessage());
     }
@@ -71,10 +73,11 @@ class DeviceServiceTest {
     void testCreateDevice_ThrowsValidationException_WhenTypeIsMissing(final String typeKey) {
         AppData appData = new AppData();
         Room room = new Room("Living Room");
+        String roomId = room.getId();
         appData.addRoom(room);
         DeviceService deviceService = ServiceTestHelper.createDeviceService(appData);
 
-        ValidationException exception = assertThrows(ValidationException.class, () -> deviceService.createDevice("Floor Lamp", typeKey, room.getId()));
+        ValidationException exception = assertThrows(ValidationException.class, () -> deviceService.createDevice("Floor Lamp", typeKey, roomId));
 
         assertEquals("Please select a device type.", exception.getMessage());
     }
@@ -157,11 +160,13 @@ class DeviceServiceTest {
         AppData appData = new AppData();
         Room room = new Room("Living Room");
         DeviceDefinition device = new DeviceDefinition("Floor Lamp", LAMP_TYPE, room.getId());
+        String deviceId = device.getId();
+        String roomId = room.getId();
         appData.addRoom(room);
         appData.addDevice(device);
         DeviceService deviceService = ServiceTestHelper.createDeviceService(appData);
 
-        ValidationException exception = assertThrows(ValidationException.class, () -> deviceService.updateDevice(device.getId(), deviceName, LAMP_TYPE, room.getId()));
+        ValidationException exception = assertThrows(ValidationException.class, () -> deviceService.updateDevice(deviceId, deviceName, LAMP_TYPE, roomId));
 
         assertEquals("Device name cannot be empty.", exception.getMessage());
     }
@@ -170,10 +175,11 @@ class DeviceServiceTest {
     void testUpdateDevice_ThrowsValidationException_WhenDeviceDoesNotExist() {
         AppData appData = new AppData();
         Room room = new Room("Living Room");
+        String roomId = room.getId();
         appData.addRoom(room);
         DeviceService deviceService = ServiceTestHelper.createDeviceService(appData);
 
-        ValidationException exception = assertThrows(ValidationException.class, () -> deviceService.updateDevice("device-missing", "Floor Lamp", LAMP_TYPE, room.getId()));
+        ValidationException exception = assertThrows(ValidationException.class, () -> deviceService.updateDevice("device-missing", "Floor Lamp", LAMP_TYPE, roomId));
 
         assertEquals("The selected device no longer exists.", exception.getMessage());
     }
@@ -184,12 +190,14 @@ class DeviceServiceTest {
         Room room = new Room("Living Room");
         DeviceDefinition firstDevice = new DeviceDefinition("Floor Lamp", LAMP_TYPE, room.getId());
         DeviceDefinition secondDevice = new DeviceDefinition("Desk Lamp", LAMP_TYPE, room.getId());
+        String firstDeviceId = firstDevice.getId();
+        String roomId = room.getId();
         appData.addRoom(room);
         appData.addDevice(firstDevice);
         appData.addDevice(secondDevice);
         DeviceService deviceService = ServiceTestHelper.createDeviceService(appData);
 
-        ValidationException exception = assertThrows(ValidationException.class, () -> deviceService.updateDevice(firstDevice.getId(), "desk lamp", LAMP_TYPE, room.getId()));
+        ValidationException exception = assertThrows(ValidationException.class, () -> deviceService.updateDevice(firstDeviceId, "desk lamp", LAMP_TYPE, roomId));
 
         assertEquals("A device with this name already exists.", exception.getMessage());
     }

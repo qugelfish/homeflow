@@ -45,8 +45,9 @@ class ScenarioServiceTest {
     void testCreateScenario_ThrowsValidationException_WhenScenarioNameIsBlank(final String scenarioName) {
         AppData appData = new AppData();
         ScenarioService scenarioService = ServiceTestHelper.createScenarioService(appData);
+        List<ScenarioAction> noActions = List.of();
 
-        ValidationException exception = assertThrows(ValidationException.class, () -> scenarioService.createScenario(scenarioName, "Description", List.of()));
+        ValidationException exception = assertThrows(ValidationException.class, () -> scenarioService.createScenario(scenarioName, "Description", noActions));
 
         assertEquals("Scenario name cannot be empty.", exception.getMessage());
     }
@@ -56,8 +57,9 @@ class ScenarioServiceTest {
         AppData appData = new AppData();
         appData.addScenario(new Scenario("Evening Routine", "Existing"));
         ScenarioService scenarioService = ServiceTestHelper.createScenarioService(appData);
+        List<ScenarioAction> noActions = List.of();
 
-        ValidationException exception = assertThrows(ValidationException.class, () -> scenarioService.createScenario("evening routine", "Duplicate", List.of()));
+        ValidationException exception = assertThrows(ValidationException.class, () -> scenarioService.createScenario("evening routine", "Duplicate", noActions));
 
         assertEquals("A scenario with this name already exists.", exception.getMessage());
     }
@@ -119,8 +121,9 @@ class ScenarioServiceTest {
     void testUpdateScenario_ThrowsValidationException_WhenScenarioIdIsBlank(final String scenarioId) {
         AppData appData = new AppData();
         ScenarioService scenarioService = ServiceTestHelper.createScenarioService(appData);
+        List<ScenarioAction> noActions = List.of();
 
-        ValidationException exception = assertThrows(ValidationException.class, () -> scenarioService.updateScenario(scenarioId, "Night Routine", "Description", List.of()));
+        ValidationException exception = assertThrows(ValidationException.class, () -> scenarioService.updateScenario(scenarioId, "Night Routine", "Description", noActions));
 
         assertEquals("Please select a scenario to edit.", exception.getMessage());
     }
@@ -132,10 +135,12 @@ class ScenarioServiceTest {
     void testUpdateScenario_ThrowsValidationException_WhenScenarioNameIsBlank(final String scenarioName) {
         AppData appData = new AppData();
         Scenario scenario = new Scenario("Evening Routine", "Turns devices on");
+        String scenarioId = scenario.getId();
         appData.addScenario(scenario);
         ScenarioService scenarioService = ServiceTestHelper.createScenarioService(appData);
+        List<ScenarioAction> noActions = List.of();
 
-        ValidationException exception = assertThrows(ValidationException.class, () -> scenarioService.updateScenario(scenario.getId(), scenarioName, "Description", List.of()));
+        ValidationException exception = assertThrows(ValidationException.class, () -> scenarioService.updateScenario(scenarioId, scenarioName, "Description", noActions));
 
         assertEquals("Scenario name cannot be empty.", exception.getMessage());
     }
@@ -144,8 +149,9 @@ class ScenarioServiceTest {
     void testUpdateScenario_ThrowsValidationException_WhenScenarioDoesNotExist() {
         AppData appData = new AppData();
         ScenarioService scenarioService = ServiceTestHelper.createScenarioService(appData);
+        List<ScenarioAction> noActions = List.of();
 
-        ValidationException exception = assertThrows(ValidationException.class, () -> scenarioService.updateScenario("scenario-missing", "Night Routine", "Description", List.of()));
+        ValidationException exception = assertThrows(ValidationException.class, () -> scenarioService.updateScenario("scenario-missing", "Night Routine", "Description", noActions));
 
         assertEquals("The selected scenario no longer exists.", exception.getMessage());
     }
@@ -155,11 +161,13 @@ class ScenarioServiceTest {
         AppData appData = new AppData();
         Scenario firstScenario = new Scenario("Evening Routine", "First");
         Scenario secondScenario = new Scenario("Night Routine", "Second");
+        String firstScenarioId = firstScenario.getId();
         appData.addScenario(firstScenario);
         appData.addScenario(secondScenario);
         ScenarioService scenarioService = ServiceTestHelper.createScenarioService(appData);
+        List<ScenarioAction> noActions = List.of();
 
-        ValidationException exception = assertThrows(ValidationException.class, () -> scenarioService.updateScenario(firstScenario.getId(), "night routine", "Description", List.of()));
+        ValidationException exception = assertThrows(ValidationException.class, () -> scenarioService.updateScenario(firstScenarioId, "night routine", "Description", noActions));
 
         assertEquals("A scenario with this name already exists.", exception.getMessage());
     }
@@ -266,11 +274,12 @@ class ScenarioServiceTest {
     void testExecuteScenario_ThrowsValidationException_WhenScenarioHasNoActions() {
         AppData appData = new AppData();
         Scenario scenario = new Scenario("Evening Routine", "Description");
+        String scenarioId = scenario.getId();
         appData.addScenario(scenario);
         ScenarioService scenarioService = ServiceTestHelper.createScenarioService(appData);
         DeviceService deviceService = ServiceTestHelper.createDeviceService(appData);
 
-        ValidationException exception = assertThrows(ValidationException.class, () -> scenarioService.executeScenario(scenario.getId(), deviceService));
+        ValidationException exception = assertThrows(ValidationException.class, () -> scenarioService.executeScenario(scenarioId, deviceService));
 
         assertEquals("The selected scenario has no actions.", exception.getMessage());
     }

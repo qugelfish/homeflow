@@ -103,10 +103,11 @@ class RoomServiceTest {
     void testUpdateRoom_ThrowsValidationException_WhenNewRoomNameIsBlank(final String roomName) {
         AppData appData = new AppData();
         Room room = new Room("Living Room");
+        String roomId = room.getId();
         appData.addRoom(room);
         RoomService roomService = ServiceTestHelper.createRoomService(appData);
 
-        ValidationException exception = assertThrows(ValidationException.class, () -> roomService.updateRoom(room.getId(), roomName));
+        ValidationException exception = assertThrows(ValidationException.class, () -> roomService.updateRoom(roomId, roomName));
 
         assertEquals("Room name cannot be empty.", exception.getMessage());
     }
@@ -126,11 +127,12 @@ class RoomServiceTest {
         AppData appData = new AppData();
         Room livingRoom = new Room("Living Room");
         Room bedroom = new Room("Bedroom");
+        String livingRoomId = livingRoom.getId();
         appData.addRoom(livingRoom);
         appData.addRoom(bedroom);
         RoomService roomService = ServiceTestHelper.createRoomService(appData);
 
-        ValidationException exception = assertThrows(ValidationException.class, () -> roomService.updateRoom(livingRoom.getId(), "bedroom"));
+        ValidationException exception = assertThrows(ValidationException.class, () -> roomService.updateRoom(livingRoomId, "bedroom"));
 
         assertEquals("A room with this name already exists.", exception.getMessage());
     }
