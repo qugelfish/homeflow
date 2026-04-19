@@ -58,16 +58,6 @@ public class ScenarioService {
     }
 
     /**
-     * Creates a new scenario.
-     *
-     * @param scenarioName the scenario name
-     * @param description  the scenario description
-     */
-    public void createScenario(final String scenarioName, final String description) {
-        createScenario(scenarioName, description, List.of());
-    }
-
-    /**
      * Creates a new scenario with the given action list.
      *
      * @param scenarioName the scenario name
@@ -82,17 +72,6 @@ public class ScenarioService {
         scenario.setActions(copyActions(actions));
         smartHomeService.getAppData().addScenario(scenario);
         smartHomeService.saveAll();
-    }
-
-    /**
-     * Updates an existing scenario.
-     *
-     * @param scenarioId   the scenario identifier
-     * @param scenarioName the updated scenario name
-     * @param description  the updated description
-     */
-    public void updateScenario(final String scenarioId, final String scenarioName, final String description) {
-        updateScenario(scenarioId, scenarioName, description, null);
     }
 
     /**
