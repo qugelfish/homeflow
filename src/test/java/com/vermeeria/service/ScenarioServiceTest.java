@@ -194,8 +194,9 @@ class ScenarioServiceTest {
     void testUpdateScenarioActions_ThrowsValidationException_WhenScenarioIdIsBlank(final String scenarioId) {
         AppData appData = new AppData();
         ScenarioService scenarioService = ServiceTestHelper.createScenarioService(appData);
+        List<ScenarioAction> noActions = List.of();
 
-        ValidationException exception = assertThrows(ValidationException.class, () -> scenarioService.updateScenarioActions(scenarioId, List.of()));
+        ValidationException exception = assertThrows(ValidationException.class, () -> scenarioService.updateScenarioActions(scenarioId, noActions));
 
         assertEquals("Please select a scenario first.", exception.getMessage());
     }
@@ -204,8 +205,9 @@ class ScenarioServiceTest {
     void testUpdateScenarioActions_ThrowsValidationException_WhenScenarioDoesNotExist() {
         AppData appData = new AppData();
         ScenarioService scenarioService = ServiceTestHelper.createScenarioService(appData);
+        List<ScenarioAction> noActions = List.of();
 
-        ValidationException exception = assertThrows(ValidationException.class, () -> scenarioService.updateScenarioActions("scenario-missing", List.of()));
+        ValidationException exception = assertThrows(ValidationException.class, () -> scenarioService.updateScenarioActions("scenario-missing", noActions));
 
         assertEquals("The selected scenario no longer exists.", exception.getMessage());
     }
@@ -324,6 +326,7 @@ class ScenarioServiceTest {
         List<ExecutionLogEntry> createdLogs = scenarioService.executeScenario(scenario.getId(), deviceService);
 
         assertEquals(1, createdLogs.size());
+        assertEquals(1, appData.getLogs().size());
         assertEquals(1, appData.getLogs().size());
         assertEquals("Failed to execute action: The target device of this action no longer exists.", createdLogs.getFirst()
                 .getMessage());
