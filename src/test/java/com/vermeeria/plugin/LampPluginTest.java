@@ -9,9 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Test class for {@link LampPlugin}.
@@ -91,14 +89,18 @@ class LampPluginTest {
 
     @Test
     void testApplyAction_ThrowsIllegalArgumentException_WhenBrightnessIsOutOfRange() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> lampPlugin.applyAction(lampPlugin.createDefaultState(), "setBrightness", "200"));
+        Map<String, Object> defaultState = lampPlugin.createDefaultState();
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> lampPlugin.applyAction(defaultState, "setBrightness", "200"));
 
         assertEquals("Lamp brightness must be between 0 and 100.", exception.getMessage());
     }
 
     @Test
     void testApplyAction_ThrowsIllegalArgumentException_WhenColorIsUnsupported() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> lampPlugin.applyAction(lampPlugin.createDefaultState(), "setColor", "Purple"));
+        Map<String, Object> defaultState = lampPlugin.createDefaultState();
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> lampPlugin.applyAction(defaultState, "setColor", "Purple"));
 
         assertEquals("Unsupported lamp color: Purple", exception.getMessage());
     }

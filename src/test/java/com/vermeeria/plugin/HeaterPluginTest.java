@@ -62,7 +62,9 @@ class HeaterPluginTest {
 
     @Test
     void testApplyAction_ThrowsIllegalArgumentException_ForUnsupportedAction() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> heaterPlugin.applyAction(heaterPlugin.createDefaultState(), "boost", null));
+        Map<String, Object> defaultState = heaterPlugin.createDefaultState();
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> heaterPlugin.applyAction(defaultState, "boost", null));
 
         assertEquals("Unsupported heater action: boost", exception.getMessage());
     }

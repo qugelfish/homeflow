@@ -59,7 +59,9 @@ class BlindPluginTest {
 
     @Test
     void testApplyAction_ThrowsIllegalArgumentException_ForUnsupportedAction() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> blindPlugin.applyAction(blindPlugin.createDefaultState(), "stop", null));
+        Map<String, Object> defaultState = blindPlugin.createDefaultState();
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> blindPlugin.applyAction(defaultState, "stop", null));
 
         assertEquals("Unsupported blind action: stop", exception.getMessage());
     }
