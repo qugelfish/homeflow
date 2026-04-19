@@ -57,6 +57,30 @@ public class ActionEditorDialog {
      * @return the updated action list
      */
     public Optional<List<ScenarioAction>> showAndWait(final Window owner, final List<ScenarioAction> initialActions) {
+        ObservableList<ScenarioAction> workingActions = FXCollections.observableArrayList(copyActions(initialActions));
+        Dialog<List<ScenarioAction>> dialog = createDialog(owner);
+        DialogControls controls = createDialogControls(workingActions);
+
+        configureDeviceListener(controls);
+        configureActionListener(controls);
+        configureActionSelectionListener(controls);
+        configureSaveActionHandler(controls, workingActions);
+        configureDeleteActionHandler(controls, workingActions);
+
+        dialog.getDialogPane().setContent(buildDialogContent(controls));
+        dialog.getDialogPane().setMinWidth(620);
+        dialog.getDialogPane()
+                .getButtonTypes()
+                .addAll(new ButtonType("Save", ButtonBar.ButtonData.OK_DONE), new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE));
+
+        updateParameterInput(null, controls.parameterLabel(), controls.parameterField(), controls.selectionBox());
+
+        dialog.setResultConverter(buttonType -> buttonType.getButtonData() == ButtonBar.ButtonData.OK_DONE ? new ArrayList<>(workingActions) : null);
+
+        return dialog.showAndWait();
+    }
+
+    private Dialog<List<ScenarioAction>> createDialog(final Window owner) {
         Dialog<List<ScenarioAction>> dialog = new Dialog<>();
         dialog.setTitle("Edit actions");
         dialog.setHeaderText(null);
@@ -64,167 +88,199 @@ public class ActionEditorDialog {
             dialog.initOwner(owner);
         }
         dialog.getDialogPane().getStyleClass().add("dialog-pane");
+        return dialog;
+    }
 
-        ObservableList<ScenarioAction> workingActions = FXCollections.observableArrayList(copyActions(initialActions));
+    private DialogControls createDialogControls(final ObservableList<ScenarioAction> workingActions) {
+        ListView<ScenarioAction> actionsList = createActionsList(workingActions);
+        ComboBox<DeviceDefinition> deviceBox = createDeviceBox();
+        ComboBox<ActionSpec> actionBox = createActionBox();
+        Label parameterLabel = new Label("Parameter");
+        TextField parameterField = createParameterField();
+        ComboBox<String> selectionBox = createSelectionBox();
+        Label validationLabel = createValidationLabel();
+        Button saveActionButton = new Button("Add action");
+        Button deleteActionButton = new Button("Delete action");
+        deleteActionButton.getStyleClass().add("danger-button");
+        deleteActionButton.setDisable(true);
 
+        return new DialogControls(actionsList, deviceBox, actionBox, parameterLabel, parameterField, selectionBox, validationLabel, saveActionButton, deleteActionButton);
+    }
+
+    private ListView<ScenarioAction> createActionsList(final ObservableList<ScenarioAction> workingActions) {
         ListView<ScenarioAction> actionsList = new ListView<>(workingActions);
         actionsList.setPrefHeight(220);
         actionsList.getStyleClass().add("navigation-list");
         actionsList.setCellFactory(listView -> createActionCell(workingActions));
+        return actionsList;
+    }
 
+    private ComboBox<DeviceDefinition> createDeviceBox() {
         ComboBox<DeviceDefinition> deviceBox = new ComboBox<>();
         deviceBox.getItems().setAll(deviceService.getAllDevices());
-        deviceBox.setMaxWidth(Double.MAX_VALUE);
-        deviceBox.setMinHeight(40);
-        deviceBox.setPrefHeight(40);
-        deviceBox.setMaxHeight(40);
-        deviceBox.getStyleClass().add(FORM_INPUT);
+        applyComboBoxStyle(deviceBox);
+        return deviceBox;
+    }
 
+    private ComboBox<ActionSpec> createActionBox() {
         ComboBox<ActionSpec> actionBox = new ComboBox<>();
-        actionBox.setMaxWidth(Double.MAX_VALUE);
-        actionBox.setMinHeight(40);
-        actionBox.setPrefHeight(40);
-        actionBox.setMaxHeight(40);
-        actionBox.getStyleClass().add(FORM_INPUT);
+        applyComboBoxStyle(actionBox);
+        return actionBox;
+    }
 
-        Label parameterLabel = new Label("Parameter");
+    private TextField createParameterField() {
         TextField parameterField = new TextField();
         parameterField.setPromptText("Enter parameter");
         parameterField.getStyleClass().add(FORM_INPUT);
+        return parameterField;
+    }
 
+    private ComboBox<String> createSelectionBox() {
         ComboBox<String> selectionBox = new ComboBox<>();
-        selectionBox.setMaxWidth(Double.MAX_VALUE);
-        selectionBox.setMinHeight(40);
-        selectionBox.setPrefHeight(40);
-        selectionBox.setMaxHeight(40);
-        selectionBox.getStyleClass().add(FORM_INPUT);
+        applyComboBoxStyle(selectionBox);
+        return selectionBox;
+    }
 
+    private Label createValidationLabel() {
         Label validationLabel = new Label();
         validationLabel.getStyleClass().add("validation-message");
         validationLabel.setVisible(false);
         validationLabel.setManaged(false);
+        return validationLabel;
+    }
 
-        Button saveActionButton = new Button("Add action");
-        Button deleteActionButton = new Button("Delete action");
-        deleteActionButton.getStyleClass().add("danger-button");
+    private <T> void applyComboBoxStyle(final ComboBox<T> comboBox) {
+        comboBox.setMaxWidth(Double.MAX_VALUE);
+        comboBox.setMinHeight(40);
+        comboBox.setPrefHeight(40);
+        comboBox.setMaxHeight(40);
+        comboBox.getStyleClass().add(FORM_INPUT);
+    }
 
-        deviceBox.valueProperty().addListener((observable, oldValue, newValue) -> {
+    private void configureDeviceListener(final DialogControls controls) {
+        controls.deviceBox().valueProperty().addListener((observable, oldValue, newValue) -> {
             String deviceId = newValue == null ? null : newValue.getId();
-            actionBox.getItems().setAll(deviceService.getSupportedActionsForDevice(deviceId));
-            actionBox.getSelectionModel().clearSelection();
-            parameterField.clear();
-            selectionBox.getItems().clear();
-            updateParameterInput(null, parameterLabel, parameterField, selectionBox);
-            clearValidation(validationLabel);
+            controls.actionBox().getItems().setAll(deviceService.getSupportedActionsForDevice(deviceId));
+            controls.actionBox().getSelectionModel().clearSelection();
+            controls.parameterField().clear();
+            controls.selectionBox().getItems().clear();
+            updateParameterInput(null, controls.parameterLabel(), controls.parameterField(), controls.selectionBox());
+            clearValidation(controls.validationLabel());
         });
+    }
 
-        actionBox.valueProperty().addListener((observable, oldValue, newValue) -> {
-            parameterField.clear();
-            selectionBox.getItems().setAll(newValue == null ? List.of() : newValue.allowedValues());
-            if (!selectionBox.getItems().isEmpty()) {
-                selectionBox.getSelectionModel().selectFirst();
+    private void configureActionListener(final DialogControls controls) {
+        controls.actionBox().valueProperty().addListener((observable, oldValue, newValue) -> {
+            controls.parameterField().clear();
+            controls.selectionBox().getItems().setAll(newValue == null ? List.of() : newValue.allowedValues());
+            if (!controls.selectionBox().getItems().isEmpty()) {
+                controls.selectionBox().getSelectionModel().selectFirst();
             }
-            updateParameterInput(newValue, parameterLabel, parameterField, selectionBox);
-            clearValidation(validationLabel);
+            updateParameterInput(newValue, controls.parameterLabel(), controls.parameterField(), controls.selectionBox());
+            clearValidation(controls.validationLabel());
         });
+    }
 
-        actionsList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            boolean actionSelected = newValue != null;
-            deleteActionButton.setDisable(!actionSelected);
-            if (!actionSelected) {
-                saveActionButton.setText("Add action");
-                return;
-            }
+    private void configureActionSelectionListener(final DialogControls controls) {
+        controls.actionsList()
+                .getSelectionModel()
+                .selectedItemProperty()
+                .addListener((observable, oldValue, newValue) -> {
+                    boolean actionSelected = newValue != null;
+                    controls.deleteActionButton().setDisable(!actionSelected);
+                    if (!actionSelected) {
+                        controls.saveActionButton().setText("Add action");
+                        return;
+                    }
 
-            saveActionButton.setText("Update action");
-            selectDevice(deviceBox, newValue.getDeviceId());
-            selectAction(actionBox, newValue.getActionKey());
-            ActionSpec selectedSpec = actionBox.getSelectionModel().getSelectedItem();
-            if (selectedSpec != null && selectedSpec.parameterKind() == ActionParameterKind.SELECTION) {
-                selectionBox.getSelectionModel().select(newValue.getParameterValue());
-            } else {
-                parameterField.setText(newValue.getParameterValue());
-            }
-            clearValidation(validationLabel);
-        });
+                    controls.saveActionButton().setText("Update action");
+                    selectDevice(controls.deviceBox(), newValue.getDeviceId());
+                    selectAction(controls.actionBox(), newValue.getActionKey());
+                    ActionSpec selectedSpec = controls.actionBox().getSelectionModel().getSelectedItem();
+                    if (selectedSpec != null && selectedSpec.parameterKind() == ActionParameterKind.SELECTION) {
+                        controls.selectionBox().getSelectionModel().select(newValue.getParameterValue());
+                    } else {
+                        controls.parameterField().setText(newValue.getParameterValue());
+                    }
+                    clearValidation(controls.validationLabel());
+                });
+    }
 
-        saveActionButton.setOnAction(event -> {
-            DeviceDefinition selectedDevice = deviceBox.getSelectionModel().getSelectedItem();
-            ActionSpec selectedSpec = actionBox.getSelectionModel().getSelectedItem();
+    private void configureSaveActionHandler(final DialogControls controls, final ObservableList<ScenarioAction> workingActions) {
+        controls.saveActionButton().setOnAction(event -> {
+            DeviceDefinition selectedDevice = controls.deviceBox().getSelectionModel().getSelectedItem();
+            ActionSpec selectedSpec = controls.actionBox().getSelectionModel().getSelectedItem();
             if (selectedDevice == null || selectedSpec == null) {
-                showValidation(validationLabel, "Please select a device and an action.");
+                showValidation(controls.validationLabel(), "Please select a device and an action.");
                 return;
             }
 
-            String parameterValue = extractParameterValue(selectedSpec, parameterField, selectionBox);
+            String parameterValue = extractParameterValue(selectedSpec, controls.parameterField(), controls.selectionBox());
             String validationMessage = validateParameterValue(selectedSpec, parameterValue);
             if (validationMessage != null) {
-                showValidation(validationLabel, validationMessage);
+                showValidation(controls.validationLabel(), validationMessage);
                 return;
             }
 
             ScenarioAction newAction = new ScenarioAction(selectedDevice.getId(), selectedSpec.actionKey(), parameterValue);
 
-            int selectedIndex = actionsList.getSelectionModel().getSelectedIndex();
+            int selectedIndex = controls.actionsList().getSelectionModel().getSelectedIndex();
             if (selectedIndex >= 0) {
                 workingActions.set(selectedIndex, newAction);
             } else {
                 workingActions.add(newAction);
             }
 
-            actionsList.getSelectionModel().clearSelection();
-            actionsList.refresh();
-            clearForm(deviceBox, actionBox, parameterField, selectionBox, parameterLabel);
-            clearValidation(validationLabel);
+            controls.actionsList().getSelectionModel().clearSelection();
+            controls.actionsList().refresh();
+            clearForm(controls.deviceBox(), controls.actionBox(), controls.parameterField(), controls.selectionBox(), controls.parameterLabel());
+            clearValidation(controls.validationLabel());
         });
+    }
 
-        deleteActionButton.setDisable(true);
-        deleteActionButton.setOnAction(event -> {
-            int selectedIndex = actionsList.getSelectionModel().getSelectedIndex();
+    private void configureDeleteActionHandler(final DialogControls controls, final ObservableList<ScenarioAction> workingActions) {
+        controls.deleteActionButton().setOnAction(event -> {
+            int selectedIndex = controls.actionsList().getSelectionModel().getSelectedIndex();
             if (selectedIndex >= 0) {
                 workingActions.remove(selectedIndex);
-                actionsList.getSelectionModel().clearSelection();
-                actionsList.refresh();
-                clearForm(deviceBox, actionBox, parameterField, selectionBox, parameterLabel);
-                clearValidation(validationLabel);
+                controls.actionsList().getSelectionModel().clearSelection();
+                controls.actionsList().refresh();
+                clearForm(controls.deviceBox(), controls.actionBox(), controls.parameterField(), controls.selectionBox(), controls.parameterLabel());
+                clearValidation(controls.validationLabel());
             }
         });
+    }
 
+    private VBox buildDialogContent(final DialogControls controls) {
+        GridPane formGrid = buildFormGrid(controls);
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+        HBox actionButtonBar = new HBox(10, controls.saveActionButton(), spacer, controls.deleteActionButton());
+
+        VBox content = new VBox(14, new Label("Configured actions"), controls.actionsList(), formGrid, controls.validationLabel(), actionButtonBar);
+        content.setPadding(new Insets(18));
+        content.getStyleClass().add("dialog-content");
+        VBox.setVgrow(controls.actionsList(), Priority.ALWAYS);
+        return content;
+    }
+
+    private GridPane buildFormGrid(final DialogControls controls) {
         GridPane formGrid = new GridPane();
         formGrid.setHgap(12);
         formGrid.setVgap(10);
         formGrid.add(new Label("Device"), 0, 0);
-        formGrid.add(deviceBox, 1, 0);
+        formGrid.add(controls.deviceBox(), 1, 0);
         formGrid.add(new Label("Action"), 0, 1);
-        formGrid.add(actionBox, 1, 1);
-        formGrid.add(parameterLabel, 0, 2);
-        formGrid.add(parameterField, 1, 2);
-        formGrid.add(selectionBox, 1, 2);
-        GridPane.setHgrow(deviceBox, Priority.ALWAYS);
-        GridPane.setHgrow(actionBox, Priority.ALWAYS);
-        GridPane.setHgrow(parameterField, Priority.ALWAYS);
-        GridPane.setHgrow(selectionBox, Priority.ALWAYS);
-
-        Region spacer = new Region();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
-        HBox actionButtonBar = new HBox(10, saveActionButton, spacer, deleteActionButton);
-
-        VBox content = new VBox(14, new Label("Configured actions"), actionsList, formGrid, validationLabel, actionButtonBar);
-        content.setPadding(new Insets(18));
-        content.getStyleClass().add("dialog-content");
-        VBox.setVgrow(actionsList, Priority.ALWAYS);
-
-        dialog.getDialogPane().setContent(content);
-        dialog.getDialogPane().setMinWidth(620);
-        dialog.getDialogPane()
-                .getButtonTypes()
-                .addAll(new ButtonType("Save", ButtonBar.ButtonData.OK_DONE), new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE));
-
-        updateParameterInput(null, parameterLabel, parameterField, selectionBox);
-
-        dialog.setResultConverter(buttonType -> buttonType.getButtonData() == ButtonBar.ButtonData.OK_DONE ? new ArrayList<>(workingActions) : null);
-
-        return dialog.showAndWait();
+        formGrid.add(controls.actionBox(), 1, 1);
+        formGrid.add(controls.parameterLabel(), 0, 2);
+        formGrid.add(controls.parameterField(), 1, 2);
+        formGrid.add(controls.selectionBox(), 1, 2);
+        GridPane.setHgrow(controls.deviceBox(), Priority.ALWAYS);
+        GridPane.setHgrow(controls.actionBox(), Priority.ALWAYS);
+        GridPane.setHgrow(controls.parameterField(), Priority.ALWAYS);
+        GridPane.setHgrow(controls.selectionBox(), Priority.ALWAYS);
+        return formGrid;
     }
 
     private void updateParameterInput(final ActionSpec actionSpec, final Label parameterLabel, final TextField parameterField, final ComboBox<String> selectionBox) {
@@ -384,5 +440,11 @@ public class ActionEditorDialog {
         return initialActions.stream()
                 .map(action -> new ScenarioAction(action.getDeviceId(), action.getActionKey(), action.getParameterValue()))
                 .toList();
+    }
+
+    private record DialogControls(ListView<ScenarioAction> actionsList, ComboBox<DeviceDefinition> deviceBox,
+                                  ComboBox<ActionSpec> actionBox, Label parameterLabel, TextField parameterField,
+                                  ComboBox<String> selectionBox, Label validationLabel, Button saveActionButton,
+                                  Button deleteActionButton) {
     }
 }

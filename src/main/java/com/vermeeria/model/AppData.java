@@ -1,6 +1,7 @@
 package com.vermeeria.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -22,7 +23,7 @@ public class AppData {
      * @return the list of rooms
      */
     public List<Room> getRooms() {
-        return rooms;
+        return Collections.unmodifiableList(rooms);
     }
 
     /**
@@ -30,8 +31,8 @@ public class AppData {
      *
      * @param rooms the rooms to store
      */
-    public void setRooms(List<Room> rooms) {
-        this.rooms = rooms;
+    public void setRooms(final List<Room> rooms) {
+        this.rooms = rooms == null ? new ArrayList<>() : new ArrayList<>(rooms);
     }
 
     /**
@@ -40,7 +41,7 @@ public class AppData {
      * @return the list of devices
      */
     public List<DeviceDefinition> getDevices() {
-        return devices;
+        return Collections.unmodifiableList(devices);
     }
 
     /**
@@ -48,8 +49,8 @@ public class AppData {
      *
      * @param devices the devices to store
      */
-    public void setDevices(List<DeviceDefinition> devices) {
-        this.devices = devices;
+    public void setDevices(final List<DeviceDefinition> devices) {
+        this.devices = devices == null ? new ArrayList<>() : new ArrayList<>(devices);
     }
 
     /**
@@ -58,7 +59,7 @@ public class AppData {
      * @return the list of scenarios
      */
     public List<Scenario> getScenarios() {
-        return scenarios;
+        return Collections.unmodifiableList(scenarios);
     }
 
     /**
@@ -66,8 +67,8 @@ public class AppData {
      *
      * @param scenarios the scenarios to store
      */
-    public void setScenarios(List<Scenario> scenarios) {
-        this.scenarios = scenarios;
+    public void setScenarios(final List<Scenario> scenarios) {
+        this.scenarios = scenarios == null ? new ArrayList<>() : new ArrayList<>(scenarios);
     }
 
     /**
@@ -76,7 +77,7 @@ public class AppData {
      * @return the list of log entries
      */
     public List<ExecutionLogEntry> getLogs() {
-        return logs;
+        return Collections.unmodifiableList(logs);
     }
 
     /**
@@ -84,7 +85,70 @@ public class AppData {
      *
      * @param logs the log entries to store
      */
-    public void setLogs(List<ExecutionLogEntry> logs) {
-        this.logs = logs;
+    public void setLogs(final List<ExecutionLogEntry> logs) {
+        this.logs = logs == null ? new ArrayList<>() : new ArrayList<>(logs);
+    }
+
+    /**
+     * Adds one room to the application data.
+     *
+     * @param room the room to add
+     */
+    public void addRoom(final Room room) {
+        rooms.add(room);
+    }
+
+    /**
+     * Removes one room from the application data.
+     *
+     * @param room the room to remove
+     */
+    public void removeRoom(final Room room) {
+        rooms.remove(room);
+    }
+
+    /**
+     * Adds one device to the application data.
+     *
+     * @param device the device to add
+     */
+    public void addDevice(final DeviceDefinition device) {
+        devices.add(device);
+    }
+
+    /**
+     * Removes one device from the application data.
+     *
+     * @param device the device to remove
+     */
+    public void removeDevice(final DeviceDefinition device) {
+        devices.remove(device);
+    }
+
+    /**
+     * Adds one scenario to the application data.
+     *
+     * @param scenario the scenario to add
+     */
+    public void addScenario(final Scenario scenario) {
+        scenarios.add(scenario);
+    }
+
+    /**
+     * Removes one scenario from the application data.
+     *
+     * @param scenario the scenario to remove
+     */
+    public void removeScenario(final Scenario scenario) {
+        scenarios.remove(scenario);
+    }
+
+    /**
+     * Adds one execution log entry to the application data.
+     *
+     * @param logEntry the log entry to add
+     */
+    public void addLogEntry(final ExecutionLogEntry logEntry) {
+        logs.add(logEntry);
     }
 }

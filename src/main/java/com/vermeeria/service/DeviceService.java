@@ -73,7 +73,7 @@ public class DeviceService {
 
         DeviceDefinition device = new DeviceDefinition(normalizedName, plugin.getTypeKey(), roomId);
         device.setCurrentState(new LinkedHashMap<>(plugin.createDefaultState()));
-        smartHomeService.getAppData().getDevices().add(device);
+        smartHomeService.getAppData().addDevice(device);
         smartHomeService.saveAll();
     }
 
@@ -122,7 +122,7 @@ public class DeviceService {
 
         DeviceDefinition deviceToDelete = smartHomeService.getAppData().getDevices().stream().filter(device -> deviceId.equals(device.getId())).findFirst().orElseThrow(() -> new ValidationException("The selected device no longer exists."));
 
-        smartHomeService.getAppData().getDevices().remove(deviceToDelete);
+        smartHomeService.getAppData().removeDevice(deviceToDelete);
         smartHomeService.saveAll();
     }
 

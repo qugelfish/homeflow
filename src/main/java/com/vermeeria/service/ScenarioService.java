@@ -80,7 +80,7 @@ public class ScenarioService {
 
         Scenario scenario = new Scenario(normalizedName, normalizeDescription(description));
         scenario.setActions(copyActions(actions));
-        smartHomeService.getAppData().getScenarios().add(scenario);
+        smartHomeService.getAppData().addScenario(scenario);
         smartHomeService.saveAll();
     }
 
@@ -150,7 +150,7 @@ public class ScenarioService {
 
         Scenario scenarioToDelete = smartHomeService.getAppData().getScenarios().stream().filter(scenario -> scenarioId.equals(scenario.getId())).findFirst().orElseThrow(() -> new ValidationException(SELECTED_SCENARIO_NO_LONGER_EXISTS));
 
-        smartHomeService.getAppData().getScenarios().remove(scenarioToDelete);
+        smartHomeService.getAppData().removeScenario(scenarioToDelete);
         smartHomeService.saveAll();
     }
 
@@ -186,7 +186,7 @@ public class ScenarioService {
                     scenarioToExecute.getName(),
                     message
             );
-            smartHomeService.getAppData().getLogs().add(logEntry);
+            smartHomeService.getAppData().addLogEntry(logEntry);
             createdLogs.add(logEntry);
         }
 

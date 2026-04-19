@@ -19,7 +19,7 @@ class RoomServiceTest {
     void testCreateRoom_TrimsRoomName() {
         AppData appData = new AppData();
         Room room = new Room("Living Room");
-        appData.getRooms().add(room);
+        appData.addRoom(room);
         RoomService roomService = createRoomService(appData);
 
         roomService.createRoom("  Bedroom   ");
@@ -32,7 +32,7 @@ class RoomServiceTest {
     void testCreateRoom_ThrowsValidationException_WhenRoomNameAlreadyExists() {
         AppData appData = new AppData();
         Room room = new Room("Living Room");
-        appData.getRooms().add(room);
+        appData.addRoom(room);
         RoomService roomService = createRoomService(appData);
 
         ValidationException exception = assertThrows(
@@ -47,7 +47,7 @@ class RoomServiceTest {
     void testCreateRoom_ThrowsValidationException_WhenRoomNameIsBlank() {
         AppData appData = new AppData();
         Room room = new Room("Living Room");
-        appData.getRooms().add(room);
+        appData.addRoom(room);
         RoomService roomService = createRoomService(appData);
 
         ValidationException exception = assertThrows(
@@ -62,7 +62,7 @@ class RoomServiceTest {
     void testCreateRoom_CreatesRoomSuccessfully() {
         AppData appData = new AppData();
         Room room = new Room("Living Room");
-        appData.getRooms().add(room);
+        appData.addRoom(room);
         RoomService roomService = createRoomService(appData);
 
         roomService.createRoom("Bedroom");
@@ -75,7 +75,7 @@ class RoomServiceTest {
     void testUpdateRoom_ChangesTheNameOfTheSelectedRoom() {
         AppData appData = new AppData();
         Room room = new Room("Living Room");
-        appData.getRooms().add(room);
+        appData.addRoom(room);
         RoomService roomService = createRoomService(appData);
 
         roomService.updateRoom(room.getId(), "Bedroom");
@@ -100,7 +100,7 @@ class RoomServiceTest {
     void testUpdateRoom_ThrowsValidationException_WhenNewRoomNameIsBlank() {
         AppData appData = new AppData();
         Room room = new Room("Living Room");
-        appData.getRooms().add(room);
+        appData.addRoom(room);
         RoomService roomService = createRoomService(appData);
 
         ValidationException exception = assertThrows(
@@ -129,8 +129,8 @@ class RoomServiceTest {
         AppData appData = new AppData();
         Room livingRoom = new Room("Living Room");
         Room bedroom = new Room("Bedroom");
-        appData.getRooms().add(livingRoom);
-        appData.getRooms().add(bedroom);
+        appData.addRoom(livingRoom);
+        appData.addRoom(bedroom);
         RoomService roomService = createRoomService(appData);
 
         ValidationException exception = assertThrows(
@@ -172,7 +172,7 @@ class RoomServiceTest {
         AppData appData = new AppData();
         Room room = new Room("Living Room");
         String roomId = room.getId();
-        appData.getRooms().add(room);
+        appData.addRoom(room);
         RoomService roomService = createRoomService(appData);
 
         roomService.deleteRoom(roomId);

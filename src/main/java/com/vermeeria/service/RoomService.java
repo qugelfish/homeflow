@@ -37,7 +37,7 @@ public class RoomService {
             throw new ValidationException("A room with this name already exists.");
         }
 
-        smartHomeService.getAppData().getRooms().add(new Room(normalizedName));
+        smartHomeService.getAppData().addRoom(new Room(normalizedName));
         smartHomeService.saveAll();
     }
 
@@ -79,7 +79,7 @@ public class RoomService {
                 .findFirst()
                 .orElseThrow(() -> new ValidationException("The selected room no longer exists."));
 
-        smartHomeService.getAppData().getRooms().remove(roomToDelete);
+        smartHomeService.getAppData().removeRoom(roomToDelete);
         smartHomeService.saveAll();
     }
 

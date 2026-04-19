@@ -64,7 +64,10 @@ public class JsonSmartHomeRepository implements SmartHomeRepository {
     @Override
     public void save(AppData appData) {
         try {
-            Files.createDirectories(filePath.getParent());
+            Path parentPath = filePath.getParent();
+            if (parentPath != null) {
+                Files.createDirectories(parentPath);
+            }
             objectMapper.writerWithDefaultPrettyPrinter().writeValue(filePath.toFile(), appData);
         } catch (IOException e) {
             throw new RuntimeException("Could not save app data.", e);

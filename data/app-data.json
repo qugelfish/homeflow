@@ -8,10 +8,6 @@
     "name" : "Kitchen",
     "createdAt" : [ 2026, 4, 19, 0, 11, 50, 37651000 ]
   }, {
-    "id" : "room-56b20330-4902-405e-b73a-1c0453f1c060",
-    "name" : "Bathroom 2",
-    "createdAt" : [ 2026, 4, 19, 0, 11, 56, 384059000 ]
-  }, {
     "id" : "room-b107aca0-161a-470f-8ab0-43f1ca8f263d",
     "name" : "Living Room",
     "createdAt" : [ 2026, 4, 19, 0, 12, 2, 566143000 ]
@@ -36,17 +32,17 @@
     "name" : "Evening",
     "description" : "Dims lights",
     "actions" : [ {
-      "id" : "scenario-action-d8813a89-2f98-491c-8c26-3b9f8e7736dc",
+      "id" : "scenario-action-2e84faf3-a849-4afc-a045-7926bd87d921",
       "deviceId" : "device-bb2fd44d-943c-42f0-88bd-290201f257d4",
       "actionKey" : "setBrightness",
       "parameterValue" : "70"
     }, {
-      "id" : "scenario-action-a21e79dc-1612-4264-9026-982492d640b4",
+      "id" : "scenario-action-5034f04e-8c1b-4c27-8516-43ea17e3143f",
       "deviceId" : "device-bb2fd44d-943c-42f0-88bd-290201f257d4",
       "actionKey" : "setBrightness",
       "parameterValue" : "0"
     }, {
-      "id" : "scenario-action-b9fdda8c-e60b-4068-a1cb-9899354f1502",
+      "id" : "scenario-action-8a14b6e4-8c50-46ac-98fa-ae2d7e83e9bb",
       "deviceId" : "device-bb2fd44d-943c-42f0-88bd-290201f257d4",
       "actionKey" : "setColor",
       "parameterValue" : "Red"
