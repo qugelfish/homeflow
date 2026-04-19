@@ -127,6 +127,7 @@ class DeviceControllerTest {
 
         @Override
         public void save(final AppData appData) {
+            // No-op for in-memory testing
         }
     }
 }
