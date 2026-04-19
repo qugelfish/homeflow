@@ -37,6 +37,7 @@ public class ActionEditorDialog {
 
     private static final int MIN_TEMPERATURE = 5;
     private static final int MAX_TEMPERATURE = 35;
+    private static final String FORM_INPUT = "form-input";
     private final DeviceService deviceService;
 
     /**
@@ -77,26 +78,26 @@ public class ActionEditorDialog {
         deviceBox.setMinHeight(40);
         deviceBox.setPrefHeight(40);
         deviceBox.setMaxHeight(40);
-        deviceBox.getStyleClass().add("form-input");
+        deviceBox.getStyleClass().add(FORM_INPUT);
 
         ComboBox<ActionSpec> actionBox = new ComboBox<>();
         actionBox.setMaxWidth(Double.MAX_VALUE);
         actionBox.setMinHeight(40);
         actionBox.setPrefHeight(40);
         actionBox.setMaxHeight(40);
-        actionBox.getStyleClass().add("form-input");
+        actionBox.getStyleClass().add(FORM_INPUT);
 
         Label parameterLabel = new Label("Parameter");
         TextField parameterField = new TextField();
         parameterField.setPromptText("Enter parameter");
-        parameterField.getStyleClass().add("form-input");
+        parameterField.getStyleClass().add(FORM_INPUT);
 
         ComboBox<String> selectionBox = new ComboBox<>();
         selectionBox.setMaxWidth(Double.MAX_VALUE);
         selectionBox.setMinHeight(40);
         selectionBox.setPrefHeight(40);
         selectionBox.setMaxHeight(40);
-        selectionBox.getStyleClass().add("form-input");
+        selectionBox.getStyleClass().add(FORM_INPUT);
 
         Label validationLabel = new Label();
         validationLabel.getStyleClass().add("validation-message");
@@ -280,7 +281,7 @@ public class ActionEditorDialog {
                 return label + " must be between " + minimum + " and " + maximum + ".";
             }
             return null;
-        } catch (NumberFormatException exception) {
+        } catch (NumberFormatException _) {
             return label + " must be a number.";
         }
     }
