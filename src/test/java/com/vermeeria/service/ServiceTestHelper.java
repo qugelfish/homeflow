@@ -25,6 +25,10 @@ final class ServiceTestHelper {
         return new DeviceService(createSmartHomeService(appData));
     }
 
+    static ScenarioService createScenarioService(final AppData appData) {
+        return new ScenarioService(createSmartHomeService(appData));
+    }
+
     /**
      * Simple in-memory repository used for isolated unit tests.
      */
