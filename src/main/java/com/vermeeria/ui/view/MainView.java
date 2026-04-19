@@ -27,6 +27,7 @@ import java.io.InputStream;
  */
 public class MainView {
 
+    private static final String EXECUTION_LOG = "Execution Log";
     private final BorderPane root;
     private final StackPane contentArea;
     private final Label statusLabel;
@@ -48,7 +49,7 @@ public class MainView {
         this.navigationList = new ListView<>();
         this.executionLogList = new ListView<>();
         this.executionLogPanel = new VBox(10);
-        this.toggleLogButton = new Button("Execution Log");
+        this.toggleLogButton = new Button(EXECUTION_LOG);
         this.loadButton = new Button("Load");
         this.saveButton = new Button("Save");
         this.executeButton = new Button("Run Scenario");
@@ -161,7 +162,7 @@ public class MainView {
     }
 
     private Parent createBottomArea() {
-        Label logTitle = new Label("Execution Log");
+        Label logTitle = new Label(EXECUTION_LOG);
         logTitle.getStyleClass().add("section-title");
 
         executionLogList.getStyleClass().add("navigation-list");
@@ -273,6 +274,6 @@ public class MainView {
     public void setLogExpanded(final boolean expanded) {
         executionLogPanel.setVisible(expanded);
         executionLogPanel.setManaged(expanded);
-        toggleLogButton.setText("Execution Log");
+        toggleLogButton.setText(EXECUTION_LOG);
     }
 }
