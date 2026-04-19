@@ -29,4 +29,14 @@ public record ActionSpec(String actionKey, String label, ActionParameterKind par
     public ActionSpec {
         allowedValues = allowedValues == null ? List.of() : List.copyOf(allowedValues);
     }
+
+    /**
+     * Returns the user-facing label for UI controls such as combo boxes.
+     *
+     * @return the action label
+     */
+    @Override
+    public String toString() {
+        return label;
+    }
 }

@@ -7,7 +7,7 @@ import java.util.List;
  * Stores all application data that should be persisted in the JSON file.
  * This includes rooms, devices, scenarios and execution log entries.
  *
- * @author Jette
+ * @author Jette, Dario
  */
 public class AppData {
 

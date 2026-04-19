@@ -1,46 +1,225 @@
 {
   "rooms" : [ {
-    "id" : "room-b71febe2-78e5-48a6-8114-64fa65bfaea8",
-    "name" : "Das ist mein erster Raum",
-    "createdAt" : [ 2026, 4, 18, 22, 0, 44, 910502000 ]
+    "id" : "room-3853e5ca-ff9b-4f39-b5cf-103e4d12da77",
+    "name" : "Bedroom",
+    "createdAt" : [ 2026, 4, 19, 0, 11, 45, 23280000 ]
   }, {
-    "id" : "room-da6984ce-3874-457a-bd8c-049332fd9000",
-    "name" : "Das ist mein zweiter Raum",
-    "createdAt" : [ 2026, 4, 18, 22, 0, 54, 143816000 ]
+    "id" : "room-0d8d3e25-037e-4191-87cb-cd97a32453e6",
+    "name" : "Kitchen",
+    "createdAt" : [ 2026, 4, 19, 0, 11, 50, 37651000 ]
   }, {
-    "id" : "room-05d9eae7-47bc-4f07-922e-232e07665cf9",
-    "name" : "Das ist mein dritter Raum",
-    "createdAt" : [ 2026, 4, 18, 22, 1, 0, 208931000 ]
+    "id" : "room-56b20330-4902-405e-b73a-1c0453f1c060",
+    "name" : "Bathroom 2",
+    "createdAt" : [ 2026, 4, 19, 0, 11, 56, 384059000 ]
   }, {
-    "id" : "room-eeb002da-2b54-478c-94e3-b5893835d87a",
-    "name" : "Tst",
-    "createdAt" : [ 2026, 4, 18, 22, 27, 44, 577134000 ]
+    "id" : "room-b107aca0-161a-470f-8ab0-43f1ca8f263d",
+    "name" : "Living Room",
+    "createdAt" : [ 2026, 4, 19, 0, 12, 2, 566143000 ]
+  }, {
+    "id" : "room-83614d35-5fa4-4864-8714-36de2367482c",
+    "name" : "Test",
+    "createdAt" : [ 2026, 4, 19, 1, 3, 38, 387425000 ]
   } ],
   "devices" : [ {
-    "id" : "device-13646f58-fd89-4743-b0d9-86a7fd809617",
+    "id" : "device-bb2fd44d-943c-42f0-88bd-290201f257d4",
     "name" : "Govee Lights",
     "typeKey" : "lamp",
-    "roomId" : "room-da6984ce-3874-457a-bd8c-049332fd9000",
+    "roomId" : "room-0d8d3e25-037e-4191-87cb-cd97a32453e6",
     "currentState" : {
       "power" : true,
-      "brightness" : 50,
-      "color" : "WHITE"
-    }
-  }, {
-    "id" : "device-c4f68b38-d0f1-46ed-8c28-dc69c6e47e18",
-    "name" : "GoveeLamp",
-    "typeKey" : "blind",
-    "roomId" : "room-05d9eae7-47bc-4f07-922e-232e07665cf9",
-    "currentState" : {
-      "position" : 100
+      "brightness" : 0,
+      "color" : "Red"
     }
   } ],
   "scenarios" : [ {
-    "id" : "scenario-3fa40f90-8675-4255-bfea-e20a9a67918e",
-    "name" : "Scenario 2",
-    "description" : "",
-    "actions" : [ ],
-    "createdAt" : [ 2026, 4, 18, 23, 22, 20, 79601000 ]
+    "id" : "scenario-5187d1e7-8ef6-4a21-8868-547f5186409f",
+    "name" : "Evening",
+    "description" : "Dims lights",
+    "actions" : [ {
+      "id" : "scenario-action-d8813a89-2f98-491c-8c26-3b9f8e7736dc",
+      "deviceId" : "device-bb2fd44d-943c-42f0-88bd-290201f257d4",
+      "actionKey" : "setBrightness",
+      "parameterValue" : "70"
+    }, {
+      "id" : "scenario-action-a21e79dc-1612-4264-9026-982492d640b4",
+      "deviceId" : "device-bb2fd44d-943c-42f0-88bd-290201f257d4",
+      "actionKey" : "setBrightness",
+      "parameterValue" : "0"
+    }, {
+      "id" : "scenario-action-b9fdda8c-e60b-4068-a1cb-9899354f1502",
+      "deviceId" : "device-bb2fd44d-943c-42f0-88bd-290201f257d4",
+      "actionKey" : "setColor",
+      "parameterValue" : "Red"
+    } ],
+    "createdAt" : [ 2026, 4, 19, 0, 13, 5, 70487000 ]
   } ],
-  "logs" : [ ]
+  "logs" : [ {
+    "id" : "log-138b08d2-858f-4743-8f3b-e8cb37e7577e",
+    "executedAt" : [ 2026, 4, 19, 0, 37, 35, 687346000 ],
+    "scenarioId" : "scenario-5187d1e7-8ef6-4a21-8868-547f5186409f",
+    "scenarioName" : "Evening",
+    "message" : "Executed Govee Lights - Set brightness: 70%"
+  }, {
+    "id" : "log-4e67fcc3-6dff-48fb-ae17-cd1e711b1601",
+    "executedAt" : [ 2026, 4, 19, 0, 37, 35, 687514000 ],
+    "scenarioId" : "scenario-5187d1e7-8ef6-4a21-8868-547f5186409f",
+    "scenarioName" : "Evening",
+    "message" : "Executed Govee Lights - Set color: Blue"
+  }, {
+    "id" : "log-0c40484f-9d9c-4336-b599-1e7911cf13b5",
+    "executedAt" : [ 2026, 4, 19, 0, 39, 15, 142000 ],
+    "scenarioId" : "scenario-5187d1e7-8ef6-4a21-8868-547f5186409f",
+    "scenarioName" : "Evening",
+    "message" : "Executed Govee Lights - Set brightness: 70%"
+  }, {
+    "id" : "log-5cf09793-d06c-4fd7-b9e5-c87c285b3be1",
+    "executedAt" : [ 2026, 4, 19, 0, 39, 15, 235000 ],
+    "scenarioId" : "scenario-5187d1e7-8ef6-4a21-8868-547f5186409f",
+    "scenarioName" : "Evening",
+    "message" : "Executed Govee Lights - Set color: Blue"
+  }, {
+    "id" : "log-9f6af61c-78ad-41ea-a080-f73da207133d",
+    "executedAt" : [ 2026, 4, 19, 0, 41, 37, 950067000 ],
+    "scenarioId" : "scenario-5187d1e7-8ef6-4a21-8868-547f5186409f",
+    "scenarioName" : "Evening",
+    "message" : "Executed Govee Lights - Set brightness: 70%"
+  }, {
+    "id" : "log-32ed8ccb-71e5-4963-8145-79b0f98e4efb",
+    "executedAt" : [ 2026, 4, 19, 0, 41, 37, 950173000 ],
+    "scenarioId" : "scenario-5187d1e7-8ef6-4a21-8868-547f5186409f",
+    "scenarioName" : "Evening",
+    "message" : "Executed Govee Lights - Set color: Blue"
+  }, {
+    "id" : "log-c3a8e7af-b1c1-4916-b131-2418fd4ede1d",
+    "executedAt" : [ 2026, 4, 19, 0, 45, 4, 806509000 ],
+    "scenarioId" : "scenario-5187d1e7-8ef6-4a21-8868-547f5186409f",
+    "scenarioName" : "Evening",
+    "message" : "Executed Govee Lights - Set brightness: 70%"
+  }, {
+    "id" : "log-52ea6740-82c4-436f-b9e0-68922b183c99",
+    "executedAt" : [ 2026, 4, 19, 0, 45, 4, 806923000 ],
+    "scenarioId" : "scenario-5187d1e7-8ef6-4a21-8868-547f5186409f",
+    "scenarioName" : "Evening",
+    "message" : "Executed Govee Lights - Set color: Blue"
+  }, {
+    "id" : "log-a142924f-0807-4408-b414-a40d295c24f4",
+    "executedAt" : [ 2026, 4, 19, 1, 1, 37, 189713000 ],
+    "scenarioId" : "scenario-5187d1e7-8ef6-4a21-8868-547f5186409f",
+    "scenarioName" : "Evening",
+    "message" : "Executed Govee Lights - Set brightness: 70%"
+  }, {
+    "id" : "log-9eed88bf-b587-4a55-a698-7dbff1526e6b",
+    "executedAt" : [ 2026, 4, 19, 1, 1, 37, 189965000 ],
+    "scenarioId" : "scenario-5187d1e7-8ef6-4a21-8868-547f5186409f",
+    "scenarioName" : "Evening",
+    "message" : "Executed Govee Lights - Set color: Blue"
+  }, {
+    "id" : "log-77fc275c-6097-47a0-acd8-33f36295ffb2",
+    "executedAt" : [ 2026, 4, 19, 16, 18, 51, 883581000 ],
+    "scenarioId" : "scenario-5187d1e7-8ef6-4a21-8868-547f5186409f",
+    "scenarioName" : "Evening",
+    "message" : "Executed Govee Lights - Set brightness: 70%"
+  }, {
+    "id" : "log-3019c2cb-c757-48ea-96bd-c7eaf8552222",
+    "executedAt" : [ 2026, 4, 19, 16, 18, 51, 883796000 ],
+    "scenarioId" : "scenario-5187d1e7-8ef6-4a21-8868-547f5186409f",
+    "scenarioName" : "Evening",
+    "message" : "Executed Govee Lights - Set color: Blue"
+  }, {
+    "id" : "log-49e2b857-adb8-47bb-be99-ae669d4c0be7",
+    "executedAt" : [ 2026, 4, 19, 16, 23, 50, 766491000 ],
+    "scenarioId" : "scenario-5187d1e7-8ef6-4a21-8868-547f5186409f",
+    "scenarioName" : "Evening",
+    "message" : "Executed Govee Lights - Set brightness: 70%"
+  }, {
+    "id" : "log-68a9d079-fb7b-456f-9b76-5805913d1b5e",
+    "executedAt" : [ 2026, 4, 19, 16, 23, 50, 766690000 ],
+    "scenarioId" : "scenario-5187d1e7-8ef6-4a21-8868-547f5186409f",
+    "scenarioName" : "Evening",
+    "message" : "Executed Govee Lights - Set color: Blue"
+  }, {
+    "id" : "log-a654aa05-31f1-4983-9b83-cda0a88ab0e2",
+    "executedAt" : [ 2026, 4, 19, 16, 29, 30, 35564000 ],
+    "scenarioId" : "scenario-5187d1e7-8ef6-4a21-8868-547f5186409f",
+    "scenarioName" : "Evening",
+    "message" : "Executed Govee Lights - Set brightness: 70%"
+  }, {
+    "id" : "log-6d991e24-f56e-4464-a16e-f8346c682490",
+    "executedAt" : [ 2026, 4, 19, 16, 29, 30, 35776000 ],
+    "scenarioId" : "scenario-5187d1e7-8ef6-4a21-8868-547f5186409f",
+    "scenarioName" : "Evening",
+    "message" : "Executed Govee Lights - Set color: Blue"
+  }, {
+    "id" : "log-bd80ee0c-d974-4c44-b3be-c84d1e47f0ee",
+    "executedAt" : [ 2026, 4, 19, 16, 33, 18, 273995000 ],
+    "scenarioId" : "scenario-5187d1e7-8ef6-4a21-8868-547f5186409f",
+    "scenarioName" : "Evening",
+    "message" : "Executed Govee Lights - Set brightness: 70%"
+  }, {
+    "id" : "log-05a00a5c-f6df-4d63-9267-2e5ba5ab15d4",
+    "executedAt" : [ 2026, 4, 19, 16, 33, 18, 274370000 ],
+    "scenarioId" : "scenario-5187d1e7-8ef6-4a21-8868-547f5186409f",
+    "scenarioName" : "Evening",
+    "message" : "Executed Govee Lights - Set color: Blue"
+  }, {
+    "id" : "log-e5f42c2b-3ddf-47de-8e04-b5afe2e27edd",
+    "executedAt" : [ 2026, 4, 19, 16, 39, 37, 87017000 ],
+    "scenarioId" : "scenario-5187d1e7-8ef6-4a21-8868-547f5186409f",
+    "scenarioName" : "Evening",
+    "message" : "Executed Kitchen - Govee Lights - Set brightness: 70%"
+  }, {
+    "id" : "log-960efbd9-caa6-4bfd-81cd-075e791b8d62",
+    "executedAt" : [ 2026, 4, 19, 16, 39, 37, 87099000 ],
+    "scenarioId" : "scenario-5187d1e7-8ef6-4a21-8868-547f5186409f",
+    "scenarioName" : "Evening",
+    "message" : "Executed Kitchen - Govee Lights - Set brightness: 0%"
+  }, {
+    "id" : "log-5a1a28ce-bfd7-4460-b131-1bf65a9a0174",
+    "executedAt" : [ 2026, 4, 19, 16, 39, 37, 87191000 ],
+    "scenarioId" : "scenario-5187d1e7-8ef6-4a21-8868-547f5186409f",
+    "scenarioName" : "Evening",
+    "message" : "Failed to execute action: Unsupported lamp color: BLUE"
+  }, {
+    "id" : "log-11ff15f4-9be5-4c3a-8196-c72480ce1d43",
+    "executedAt" : [ 2026, 4, 19, 16, 39, 37, 87230000 ],
+    "scenarioId" : "scenario-5187d1e7-8ef6-4a21-8868-547f5186409f",
+    "scenarioName" : "Evening",
+    "message" : "Failed to execute action: Unsupported lamp color: Blue"
+  }, {
+    "id" : "log-50d4c9b1-7a40-4692-9f8e-7ab2ebc51955",
+    "executedAt" : [ 2026, 4, 19, 16, 40, 32, 943704000 ],
+    "scenarioId" : "scenario-5187d1e7-8ef6-4a21-8868-547f5186409f",
+    "scenarioName" : "Evening",
+    "message" : "Executed Kitchen - Govee Lights - Set brightness: 70%"
+  }, {
+    "id" : "log-df1cca63-178e-43ae-b473-9f8a6bcf87be",
+    "executedAt" : [ 2026, 4, 19, 16, 40, 32, 943750000 ],
+    "scenarioId" : "scenario-5187d1e7-8ef6-4a21-8868-547f5186409f",
+    "scenarioName" : "Evening",
+    "message" : "Executed Kitchen - Govee Lights - Set brightness: 0%"
+  }, {
+    "id" : "log-1692130f-0c2a-4b38-ba2c-936b5baa45ce",
+    "executedAt" : [ 2026, 4, 19, 16, 40, 32, 943803000 ],
+    "scenarioId" : "scenario-5187d1e7-8ef6-4a21-8868-547f5186409f",
+    "scenarioName" : "Evening",
+    "message" : "Failed to execute action: Unsupported lamp color: Red"
+  }, {
+    "id" : "log-211da096-881c-43b5-b698-ba7ec313b30d",
+    "executedAt" : [ 2026, 4, 19, 16, 41, 15, 36310000 ],
+    "scenarioId" : "scenario-5187d1e7-8ef6-4a21-8868-547f5186409f",
+    "scenarioName" : "Evening",
+    "message" : "Executed Kitchen - Govee Lights - Set brightness: 70%"
+  }, {
+    "id" : "log-45c7ab9c-35fb-40e2-a9e6-39138cb40ca7",
+    "executedAt" : [ 2026, 4, 19, 16, 41, 15, 36368000 ],
+    "scenarioId" : "scenario-5187d1e7-8ef6-4a21-8868-547f5186409f",
+    "scenarioName" : "Evening",
+    "message" : "Executed Kitchen - Govee Lights - Set brightness: 0%"
+  }, {
+    "id" : "log-d9b8cb3b-7a85-404a-9b3a-1e60747fd111",
+    "executedAt" : [ 2026, 4, 19, 16, 41, 15, 36439000 ],
+    "scenarioId" : "scenario-5187d1e7-8ef6-4a21-8868-547f5186409f",
+    "scenarioName" : "Evening",
+    "message" : "Executed Kitchen - Govee Lights - Set color: Red"
+  } ]
 }

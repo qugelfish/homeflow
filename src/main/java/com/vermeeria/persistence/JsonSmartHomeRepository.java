@@ -12,7 +12,7 @@ import java.nio.file.Path;
  * Stores and loads application data in JSON format.
  * The data is written to and read from a file on the local file system.
  *
- * @author Jette
+ * @author Jette, Dario
  */
 public class JsonSmartHomeRepository implements SmartHomeRepository {
 
