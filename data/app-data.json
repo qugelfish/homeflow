@@ -225,5 +225,41 @@
     "scenarioId" : "scenario-5187d1e7-8ef6-4a21-8868-547f5186409f",
     "scenarioName" : "Evening",
     "message" : "Executed Kitchen - Govee Lights - Set color: Red"
+  }, {
+    "id" : "log-1b6502a3-2394-4469-a0ba-500f35ad11d7",
+    "executedAt" : [ 2026, 4, 19, 19, 3, 7, 992779000 ],
+    "scenarioId" : "scenario-5187d1e7-8ef6-4a21-8868-547f5186409f",
+    "scenarioName" : "Evening",
+    "message" : "Executed Kitchen - Govee Lights - Set brightness: 70%"
+  }, {
+    "id" : "log-eabb7881-515a-4fe6-bf87-673151c3d8f2",
+    "executedAt" : [ 2026, 4, 19, 19, 3, 7, 992930000 ],
+    "scenarioId" : "scenario-5187d1e7-8ef6-4a21-8868-547f5186409f",
+    "scenarioName" : "Evening",
+    "message" : "Executed Kitchen - Govee Lights - Set brightness: 0%"
+  }, {
+    "id" : "log-76074b0a-d475-446f-b8e3-942144a5bac5",
+    "executedAt" : [ 2026, 4, 19, 19, 3, 7, 993109000 ],
+    "scenarioId" : "scenario-5187d1e7-8ef6-4a21-8868-547f5186409f",
+    "scenarioName" : "Evening",
+    "message" : "Executed Kitchen - Govee Lights - Set color: Red"
+  }, {
+    "id" : "log-1ac52600-4cc8-4837-902b-9961c7c86475",
+    "executedAt" : [ 2026, 4, 19, 19, 6, 40, 359714000 ],
+    "scenarioId" : "scenario-5187d1e7-8ef6-4a21-8868-547f5186409f",
+    "scenarioName" : "Evening",
+    "message" : "Executed Kitchen - Govee Lights - Set brightness: 70%"
+  }, {
+    "id" : "log-9cedb6ce-faaf-4dff-92b3-20dbb1a46dd5",
+    "executedAt" : [ 2026, 4, 19, 19, 6, 40, 359844000 ],
+    "scenarioId" : "scenario-5187d1e7-8ef6-4a21-8868-547f5186409f",
+    "scenarioName" : "Evening",
+    "message" : "Executed Kitchen - Govee Lights - Set brightness: 0%"
+  }, {
+    "id" : "log-3c7d8a5f-04e8-4e10-8a73-8c3202cb2827",
+    "executedAt" : [ 2026, 4, 19, 19, 6, 40, 359998000 ],
+    "scenarioId" : "scenario-5187d1e7-8ef6-4a21-8868-547f5186409f",
+    "scenarioName" : "Evening",
+    "message" : "Executed Kitchen - Govee Lights - Set color: Red"
   } ]
 }
