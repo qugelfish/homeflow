@@ -14,6 +14,7 @@ import java.util.List;
  */
 public class ScenarioService {
 
+    private static final String SELECTED_SCENARIO_NO_LONGER_EXISTS = "The selected scenario no longer exists.";
     private final SmartHomeService smartHomeService;
 
     /**
@@ -110,7 +111,7 @@ public class ScenarioService {
         String normalizedName = validateAndNormalizeScenarioName(scenarioName);
         validateUniqueScenarioName(normalizedName, scenarioId);
 
-        Scenario scenarioToUpdate = smartHomeService.getAppData().getScenarios().stream().filter(scenario -> scenarioId.equals(scenario.getId())).findFirst().orElseThrow(() -> new ValidationException("The selected scenario no longer exists."));
+        Scenario scenarioToUpdate = smartHomeService.getAppData().getScenarios().stream().filter(scenario -> scenarioId.equals(scenario.getId())).findFirst().orElseThrow(() -> new ValidationException(SELECTED_SCENARIO_NO_LONGER_EXISTS));
 
         scenarioToUpdate.setName(normalizedName);
         scenarioToUpdate.setDescription(normalizeDescription(description));
@@ -131,7 +132,7 @@ public class ScenarioService {
             throw new ValidationException("Please select a scenario first.");
         }
 
-        Scenario scenarioToUpdate = smartHomeService.getAppData().getScenarios().stream().filter(scenario -> scenarioId.equals(scenario.getId())).findFirst().orElseThrow(() -> new ValidationException("The selected scenario no longer exists."));
+        Scenario scenarioToUpdate = smartHomeService.getAppData().getScenarios().stream().filter(scenario -> scenarioId.equals(scenario.getId())).findFirst().orElseThrow(() -> new ValidationException(SELECTED_SCENARIO_NO_LONGER_EXISTS));
 
         scenarioToUpdate.setActions(copyActions(actions));
         smartHomeService.saveAll();
@@ -147,7 +148,7 @@ public class ScenarioService {
             throw new ValidationException("Please select a scenario to delete.");
         }
 
-        Scenario scenarioToDelete = smartHomeService.getAppData().getScenarios().stream().filter(scenario -> scenarioId.equals(scenario.getId())).findFirst().orElseThrow(() -> new ValidationException("The selected scenario no longer exists."));
+        Scenario scenarioToDelete = smartHomeService.getAppData().getScenarios().stream().filter(scenario -> scenarioId.equals(scenario.getId())).findFirst().orElseThrow(() -> new ValidationException(SELECTED_SCENARIO_NO_LONGER_EXISTS));
 
         smartHomeService.getAppData().getScenarios().remove(scenarioToDelete);
         smartHomeService.saveAll();
@@ -216,7 +217,7 @@ public class ScenarioService {
         return smartHomeService.getAppData().getScenarios().stream()
                 .filter(scenario -> scenarioId.equals(scenario.getId()))
                 .findFirst()
-                .orElseThrow(() -> new ValidationException("The selected scenario no longer exists."));
+                .orElseThrow(() -> new ValidationException(SELECTED_SCENARIO_NO_LONGER_EXISTS));
     }
 
     private List<ScenarioAction> copyActions(final List<ScenarioAction> actions) {
