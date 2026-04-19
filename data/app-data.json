@@ -26,6 +26,14 @@
       "brightness" : 0,
       "color" : "Red"
     }
+  }, {
+    "id" : "device-619b1eb0-97f0-44b6-bbfb-c41807fb458f",
+    "name" : "Test",
+    "typeKey" : "blind",
+    "roomId" : "room-3853e5ca-ff9b-4f39-b5cf-103e4d12da77",
+    "currentState" : {
+      "position" : 100
+    }
   } ],
   "scenarios" : [ {
     "id" : "scenario-5187d1e7-8ef6-4a21-8868-547f5186409f",
