@@ -3,6 +3,7 @@
     -fx-font-family: "System";
     -fx-background-color: #0d1117;
     -fx-text-fill: #c9d1d9;
+    -selection-accent-color: #661aa0;
 }
 
 .label {
@@ -75,7 +76,7 @@
 }
 
 .navigation-list .list-cell:selected {
-    -fx-background-color: #1f6feb;
+    -fx-background-color: -selection-accent-color;
     -fx-text-fill: white;
 }
 
@@ -371,4 +372,50 @@
     -fx-min-height: 28;
     -fx-pref-height: 28;
     -fx-padding: 0;
+}
+
+.accent-picker {
+    -fx-background-radius: 5;
+    -fx-background-color: #da70d6;
+    -fx-background-insets: 0;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+    -fx-border-radius: 5;
+}
+
+.accent-picker:hover {
+    -fx-opacity: 0.92;
+}
+
+.accent-menu {
+    -fx-background-color: transparent;
+}
+
+.accent-menu .context-menu {
+    -fx-background-color: #161b22;
+    -fx-background-radius: 12;
+    -fx-border-color: #30363d;
+    -fx-border-radius: 12;
+    -fx-padding: 8;
+}
+
+.accent-menu .menu-item,
+.accent-menu .custom-menu-item {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.accent-menu-grid {
+    -fx-padding: 2 2 4 2;
+}
+
+.accent-swatch {
+    -fx-background-radius: 4;
+    -fx-border-color: transparent;
+    -fx-border-radius: 4;
+    -fx-padding: 0;
+}
+
+.accent-swatch:hover {
+    -fx-opacity: 0.92;
 }

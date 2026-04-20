@@ -98,6 +98,7 @@ class JsonSmartHomeRepositoryTest {
         assertEquals("Evening Routine", loadedLog.getScenarioName());
         assertEquals("Executed Living Room - Floor Lamp - Set brightness: 50%", loadedLog.getMessage());
         assertEquals(LocalDateTime.of(2026, 4, 19, 18, 0), loadedLog.getExecutedAt());
+        assertEquals("#000000", loadedData.getAccentColorHex());
     }
 
     @Test
@@ -113,6 +114,7 @@ class JsonSmartHomeRepositoryTest {
         assertTrue(jsonContent.contains("\"rooms\""));
         assertTrue(jsonContent.contains("\"devices\""));
         assertFalse(jsonContent.isBlank());
+        assertTrue(jsonContent.contains("\"accentColorHex\""));
     }
 
     @Test
@@ -143,6 +145,7 @@ class JsonSmartHomeRepositoryTest {
         appData.addDevice(device);
         appData.addScenario(scenario);
         appData.addLogEntry(logEntry);
+        appData.setAccentColorHex("#000000");
         return appData;
     }
 }

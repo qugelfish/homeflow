@@ -5,20 +5,24 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.CustomMenuItem;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ToolBar;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
-import java.io.InputStream;
+import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * Builds the main application layout of the HomeFlow user interface.
@@ -28,6 +32,21 @@ import java.io.InputStream;
 public class MainView {
 
     private static final String EXECUTION_LOG = "Execution Log";
+    private static final String ACCENT_SELECTION_STYLE = "-selection-accent-color: %s;";
+    private static final List<Color> ACCENT_PALETTE = List.of(
+            Color.BLACK,
+            Color.DIMGRAY,
+            Color.SLATEBLUE,
+            Color.ORCHID,
+            Color.CORNFLOWERBLUE,
+            Color.DODGERBLUE,
+            Color.MEDIUMSEAGREEN,
+            Color.GOLD,
+            Color.DARKORANGE,
+            Color.TOMATO,
+            Color.CRIMSON,
+            Color.HOTPINK
+    );
     private final BorderPane root;
     private final StackPane contentArea;
     private final Label statusLabel;
@@ -38,6 +57,10 @@ public class MainView {
     private final Button loadButton;
     private final Button saveButton;
     private final Button executeButton;
+    private final Button accentColorButton;
+    private final ContextMenu accentColorMenu;
+    private Color accentColor;
+    private Consumer<Color> accentColorChangeListener;
 
     /**
      * Creates the main view and initializes the base layout.
@@ -53,12 +76,16 @@ public class MainView {
         this.loadButton = new Button("Load");
         this.saveButton = new Button("Save");
         this.executeButton = new Button("Run Scenario");
+        this.accentColor = Color.ORCHID;
+        this.accentColorButton = new Button();
+        this.accentColorMenu = new ContextMenu();
 
         initialize();
     }
 
     private void initialize() {
         root.getStyleClass().add("app-root");
+        applyAccentColor(accentColor);
 
         root.setTop(createToolbar());
         root.setLeft(createNavigation());
@@ -83,15 +110,20 @@ public class MainView {
         brandBox.setAlignment(Pos.CENTER_LEFT);
         brandBox.getStyleClass().add("brand-box");
 
-        InputStream logoStream = getClass().getResourceAsStream("/images/logo.png");
-        if (logoStream != null) {
-            ImageView logoView = new ImageView(new Image(logoStream));
-            logoView.setFitWidth(42);
-            logoView.setFitHeight(42);
-            logoView.setPreserveRatio(true);
-            logoView.getStyleClass().add("app-logo");
-            brandBox.getChildren().add(logoView);
-        }
+        accentColorButton.getStyleClass().add("accent-picker");
+        accentColorButton.setTooltip(new Tooltip("Choose accent color"));
+        accentColorButton.setPrefSize(24, 24);
+        accentColorButton.setMinSize(24, 24);
+        accentColorButton.setMaxSize(24, 24);
+        accentColorButton.setOnAction(event -> {
+            if (accentColorMenu.isShowing()) {
+                accentColorMenu.hide();
+            } else {
+                accentColorMenu.show(accentColorButton, javafx.geometry.Side.BOTTOM, 0, 8);
+            }
+        });
+        configureAccentColorMenu();
+
         HBox titleBox = new HBox(0, homeLabel, flowLabel);
         titleBox.setAlignment(Pos.CENTER_LEFT);
         brandBox.getChildren().add(titleBox);
@@ -99,10 +131,11 @@ public class MainView {
         HBox spacer = new HBox();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        ToolBar toolBar = new ToolBar(brandBox, loadButton, saveButton, executeButton, spacer);
+        ToolBar toolBar = new ToolBar(brandBox, loadButton, saveButton, executeButton, spacer, accentColorButton);
 
         toolBar.getStyleClass().add("top-toolbar");
         toolBar.setMinHeight(68);
+
         return toolBar;
     }
 
@@ -267,6 +300,23 @@ public class MainView {
     }
 
     /**
+     * Applies the accent color used for selected list entries.
+     *
+     * @param newAccentColor the new accent color
+     */
+    public void applyAccentColor(final Color newAccentColor) {
+        if (newAccentColor == null) {
+            return;
+        }
+        accentColor = newAccentColor;
+        root.setStyle(ACCENT_SELECTION_STYLE.formatted(toCssColor(newAccentColor)));
+        accentColorButton.setStyle("-fx-background-color: " + toCssColor(newAccentColor) + ";");
+        if (accentColorChangeListener != null) {
+            accentColorChangeListener.accept(newAccentColor);
+        }
+    }
+
+    /**
      * Expands or collapses the execution log area.
      *
      * @param expanded whether the log area should be visible
@@ -275,5 +325,48 @@ public class MainView {
         executionLogPanel.setVisible(expanded);
         executionLogPanel.setManaged(expanded);
         toggleLogButton.setText(EXECUTION_LOG);
+    }
+
+    private String toCssColor(final Color color) {
+        int red = (int) Math.round(color.getRed() * 255);
+        int green = (int) Math.round(color.getGreen() * 255);
+        int blue = (int) Math.round(color.getBlue() * 255);
+        return String.format("#%02X%02X%02X", red, green, blue);
+    }
+
+    private void configureAccentColorMenu() {
+        accentColorMenu.getStyleClass().add("accent-menu");
+
+        GridPane paletteGrid = new GridPane();
+        paletteGrid.getStyleClass().add("accent-menu-grid");
+        paletteGrid.setHgap(6);
+        paletteGrid.setVgap(6);
+
+        for (int index = 0; index < ACCENT_PALETTE.size(); index++) {
+            Color paletteColor = ACCENT_PALETTE.get(index);
+            Button swatchButton = new Button();
+            swatchButton.getStyleClass().add("accent-swatch");
+            swatchButton.setPrefSize(18, 18);
+            swatchButton.setMinSize(18, 18);
+            swatchButton.setMaxSize(18, 18);
+            swatchButton.setStyle("-fx-background-color: " + toCssColor(paletteColor) + ";");
+            swatchButton.setOnAction(event -> {
+                applyAccentColor(paletteColor);
+                accentColorMenu.hide();
+            });
+            paletteGrid.add(swatchButton, index % 4, index / 4);
+        }
+
+        CustomMenuItem paletteItem = new CustomMenuItem(paletteGrid, false);
+        accentColorMenu.getItems().setAll(paletteItem);
+    }
+
+    /**
+     * Registers a listener that is notified whenever the accent color changes.
+     *
+     * @param accentColorChangeListener the listener to invoke on color changes
+     */
+    public void setAccentColorChangeListener(final Consumer<Color> accentColorChangeListener) {
+        this.accentColorChangeListener = accentColorChangeListener;
     }
 }

@@ -20,6 +20,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
 import java.util.List;
 
@@ -38,6 +39,7 @@ public class MainController {
     private final DeviceController deviceController;
     private final ScenarioController scenarioController;
     private boolean logExpanded;
+    private boolean applyingStoredAccentColor;
 
     /**
      * Creates the main controller and initializes the basic user interface.
@@ -50,6 +52,7 @@ public class MainController {
         this.scenarioService = scenarioService;
         this.mainView = new MainView();
         this.logExpanded = false;
+        this.applyingStoredAccentColor = false;
 
         RoomView roomView = new RoomView();
         DeviceView deviceView = new DeviceView();
@@ -60,6 +63,8 @@ public class MainController {
         initializeExecutionLogList();
 
         wireActions();
+        applyStoredAccentColor();
+        mainView.setAccentColorChangeListener(this::persistAccentColor);
         refreshExecutionLogs();
         showRoomsView();
         updateStatus("Ready");
@@ -84,6 +89,7 @@ public class MainController {
 
     private void handleLoadProject() {
         smartHomeService.reloadAll();
+        applyStoredAccentColor();
         refreshCurrentView();
         refreshExecutionLogs();
         updateStatus("Loaded project data");
@@ -206,6 +212,33 @@ public class MainController {
 
     private void setNavigationLocked(final boolean locked) {
         mainView.getNavigationList().setDisable(locked);
+    }
+
+    private void applyStoredAccentColor() {
+        String accentColorHex = smartHomeService.getAppData().getAccentColorHex();
+        try {
+            applyingStoredAccentColor = true;
+            mainView.applyAccentColor(Color.web(accentColorHex));
+        } catch (IllegalArgumentException ignored) {
+            mainView.applyAccentColor(Color.web("#DA70D6"));
+        } finally {
+            applyingStoredAccentColor = false;
+        }
+    }
+
+    private void persistAccentColor(final Color accentColor) {
+        if (applyingStoredAccentColor) {
+            return;
+        }
+        smartHomeService.getAppData().setAccentColorHex(toCssColor(accentColor));
+        smartHomeService.saveAll();
+    }
+
+    private String toCssColor(final Color color) {
+        int red = (int) Math.round(color.getRed() * 255);
+        int green = (int) Math.round(color.getGreen() * 255);
+        int blue = (int) Math.round(color.getBlue() * 255);
+        return String.format("#%02X%02X%02X", red, green, blue);
     }
 
     private void showRoomsView() {

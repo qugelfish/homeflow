@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
@@ -41,5 +42,15 @@ class AppDataModelTest extends AbstractModelTestHelper {
         assertNotNull(appData.getDevices());
         assertNotNull(appData.getScenarios());
         assertNotNull(appData.getLogs());
+        assertEquals("#DA70D6", appData.getAccentColorHex());
+    }
+
+    @Test
+    void testSetAccentColorHex_UsesDefaultColor_WhenInputIsBlank() {
+        AppData appData = new AppData();
+
+        appData.setAccentColorHex("  ");
+
+        assertEquals("#DA70D6", appData.getAccentColorHex());
     }
 }
