@@ -261,5 +261,6 @@
     "scenarioId" : "scenario-5187d1e7-8ef6-4a21-8868-547f5186409f",
     "scenarioName" : "Evening",
     "message" : "Executed Kitchen - Govee Lights - Set color: Red"
-  } ]
+  } ],
+  "accentColorHex" : "#6A5ACD"
 }

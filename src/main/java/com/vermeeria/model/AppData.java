@@ -12,10 +12,12 @@ import java.util.List;
  */
 public class AppData {
 
+    private static final String DEFAULT_ACCENT_COLOR = "#DA70D6";
     private List<Room> rooms = new ArrayList<>();
     private List<DeviceDefinition> devices = new ArrayList<>();
     private List<Scenario> scenarios = new ArrayList<>();
     private List<ExecutionLogEntry> logs = new ArrayList<>();
+    private String accentColorHex = DEFAULT_ACCENT_COLOR;
 
     /**
      * Returns the list of all rooms.
@@ -150,5 +152,25 @@ public class AppData {
      */
     public void addLogEntry(final ExecutionLogEntry logEntry) {
         logs.add(logEntry);
+    }
+
+    /**
+     * Returns the persisted accent color used by the UI.
+     *
+     * @return the accent color as a hex string
+     */
+    public String getAccentColorHex() {
+        return accentColorHex;
+    }
+
+    /**
+     * Sets the persisted accent color used by the UI.
+     *
+     * @param accentColorHex the accent color as a hex string
+     */
+    public void setAccentColorHex(final String accentColorHex) {
+        this.accentColorHex = accentColorHex == null || accentColorHex.isBlank()
+                ? DEFAULT_ACCENT_COLOR
+                : accentColorHex;
     }
 }
